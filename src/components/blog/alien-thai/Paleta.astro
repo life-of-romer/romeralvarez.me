@@ -1,0 +1,182 @@
+---
+import "./alien-thai.css";
+
+// Alien Thai's real tokens. Picking one repaints the mini site's accent.
+const colores = [
+  { nombre: "green", hex: "#abd64d", nota: "Acento principal, el de los aliens" },
+  { nombre: "orange", hex: "#f3821d", nota: "El fuego del mural" },
+  { nombre: "teal", hex: "#5eb6b2", nota: "El alien azul" },
+  { nombre: "wall", hex: "#efebdf", nota: "La pared, color del texto" },
+];
+---
+
+<section class="x wide paleta" aria-label="Paleta de Alien Thai">
+  <div class="list" role="group" aria-label="Color de acento">
+    {
+      colores.map((c, i) => (
+        <button class="sw" type="button" data-c={c.hex} aria-pressed={i === 0 ? "true" : "false"}>
+          <i style={`background:${c.hex}`} />
+          <span>
+            {c.nombre}
+            <small>{c.nota}</small>
+          </span>
+          <code>{c.hex}</code>
+        </button>
+      ))
+    }
+  </div>
+  <div class="mini at" aria-hidden="true">
+    <div class="nav"><span>Alien Thai</span><span>Clase de prueba</span></div>
+    <div>
+      <p class="h">Elige tu<br />asalto<i>.</i></p>
+      <span class="btn">Reserva tu clase de prueba</span>
+    </div>
+  </div>
+  <div class="types">
+    <div><b class="t-display">Un mundo</b><span>Big Shoulders · titulares</span></div>
+    <div><b class="t-sans">Aquí no hace falta</b><span>Hanken Grotesk · texto</span></div>
+    <div><b class="t-mono">10:00–11:30</b><span>JetBrains Mono · horarios</span></div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".paleta").forEach((root) => {
+    const mini = root.querySelector<HTMLElement>(".mini")!;
+    const buttons = root.querySelectorAll<HTMLButtonElement>(".sw");
+    buttons.forEach((b) =>
+      b.addEventListener("click", () => {
+        buttons.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+        mini.style.setProperty("--acc", b.dataset.c!);
+      }),
+    );
+  });
+</script>
+
+<style>
+  .paleta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 32px;
+    padding: clamp(22px, 4vw, 40px);
+    border-radius: 12px;
+    background: var(--surface);
+  }
+  .list {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+  }
+  .sw {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 8px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--paper);
+    color: var(--ink);
+    font: 500 15px/1.2 var(--sans);
+    text-align: left;
+    cursor: pointer;
+  }
+  .sw[aria-pressed="true"] {
+    border-color: var(--ink);
+    background: var(--surface);
+  }
+  .sw i {
+    width: 44px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid rgb(17 19 24 / 0.12);
+  }
+  .sw small {
+    display: block;
+    font: 400 13px/1.4 var(--sans);
+    color: var(--ink-muted);
+  }
+  .sw code {
+    font: 500 12px/1 var(--mono);
+    color: var(--ink-muted);
+  }
+  .mini {
+    --acc: var(--at-green);
+    display: grid;
+    align-content: space-between;
+    min-height: 300px;
+    padding: 22px;
+    border-radius: 10px;
+  }
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    font: 800 15px/1 var(--at-display);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .nav span:last-child {
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--acc);
+    font: 500 10px/1 var(--mono);
+  }
+  .h {
+    margin: 0;
+    font: 800 clamp(2.4rem, 5vw, 3.6rem) / 0.88 var(--at-display);
+    text-transform: uppercase;
+  }
+  .h i {
+    font-style: normal;
+    color: var(--acc);
+    transition: color 0.4s var(--ease);
+  }
+  .btn {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 11px 16px;
+    border-radius: 4px;
+    background: var(--acc);
+    color: var(--at-tatami);
+    font: 500 13px/1 var(--at-sans);
+    transition: background 0.4s var(--ease);
+  }
+  .types {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+  .types b {
+    display: block;
+    margin-bottom: 8px;
+    line-height: 1;
+    overflow-wrap: anywhere;
+  }
+  .types span {
+    font: 500 11px/1.4 var(--mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .t-display {
+    font: 800 32px var(--at-display);
+    text-transform: uppercase;
+  }
+  .t-sans {
+    font: 500 26px var(--at-sans);
+  }
+  /* The gym's site uses JetBrains Mono; the system mono stands in to keep a third font off this page. */
+  .t-mono {
+    font: 500 20px ui-monospace, Menlo, monospace;
+    padding-top: 6px;
+  }
+  @media (max-width: 760px) {
+    .paleta {
+      grid-template-columns: 1fr;
+    }
+    .types {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

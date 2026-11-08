@@ -1,0 +1,95 @@
+---
+import "./alien-thai.css";
+
+interface Props {
+  /** The last character is painted green. */
+  titulo: string;
+}
+
+const { titulo } = Astro.props;
+const lines = titulo.split("\n");
+const lastLine = lines.pop() ?? "";
+---
+
+<!-- Full-bleed carousel with CSS scroll-snap. The arrows only nudge it; it works without script. -->
+<section class="x at bleed artes" aria-label={titulo.replace("\n", " ")}>
+  <div class="head">
+    <h2 class="at-title">
+      {lines.map((l) => <>{l}<br /></>)}{lastLine.slice(0, -1)}<i>{lastLine.slice(-1)}</i>
+    </h2>
+    <div class="arrows">
+      <button class="round" type="button" data-dir="-1" aria-label="Anterior">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </button>
+      <button class="round" type="button" data-dir="1" aria-label="Siguiente">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="track">
+    <slot />
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".artes").forEach((root) => {
+    const track = root.querySelector<HTMLElement>(".track")!;
+    root.querySelectorAll<HTMLButtonElement>(".round").forEach((b) =>
+      b.addEventListener("click", () => {
+        const step = (track.firstElementChild as HTMLElement | null)?.offsetWidth ?? 300;
+        const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+        track.scrollBy({ left: Number(b.dataset.dir) * step, behavior: smooth ? "smooth" : "auto" });
+      }),
+    );
+  });
+</script>
+
+<style>
+  .artes {
+    padding-block: 40px 28px;
+  }
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 0 var(--gutter) 0 var(--indent);
+  }
+  .head .at-title {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+  }
+  .arrows {
+    display: flex;
+    gap: 8px;
+  }
+  .round {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--at-line);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--at-wall);
+    cursor: pointer;
+  }
+  .round:hover {
+    background: rgb(239 235 223 / 0.1);
+  }
+  .round svg {
+    width: 16px;
+    height: 16px;
+  }
+  .track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(78vw, 520px);
+    gap: 18px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: var(--indent);
+    padding: 0 var(--gutter) 18px var(--indent);
+    scrollbar-color: var(--at-wall-dim) transparent;
+  }
+</style>

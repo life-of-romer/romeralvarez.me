@@ -1,0 +1,72 @@
+/* Alien Thai's world, scoped to its blog components. Every component root carries .x so the
+   post's prose rules leave it alone; .at paints the dark gym surface. Tokens copied from
+   romerenr.github.io/alien-thai. */
+.x {
+  --at-tatami: #0f100a;
+  --at-tatami-2: #191c13;
+  --at-wall: #efebdf;
+  --at-wall-dim: #afab9d;
+  --at-line: rgb(239 235 223 / 0.16);
+  --at-green: #abd64d;
+  --at-orange: #f3821d;
+  --at-teal: #5eb6b2;
+  --at-display: var(--font-at-display), "Arial Narrow", sans-serif;
+  --at-sans: var(--font-at-sans), "Helvetica Neue", Arial, sans-serif;
+}
+
+.x img {
+  display: block;
+  max-width: 100%;
+}
+
+.at {
+  background: var(--at-tatami);
+  color: var(--at-wall);
+  font-family: var(--at-sans);
+}
+
+.at ::selection {
+  background: var(--at-green);
+  color: var(--at-tatami);
+}
+
+.at-title {
+  margin: 0;
+  font: 800 clamp(2.6rem, 7vw, 5.6rem) / 0.88 var(--at-display);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.at-title i {
+  font-style: normal;
+  color: var(--at-green);
+}
+
+.at-meta {
+  font: 500 12px/1.5 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--at-green);
+}
+
+.at-pill {
+  display: inline-block;
+  font: 500 12px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 13px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.at-pill.green {
+  background: var(--at-green);
+  color: var(--at-tatami);
+}
+
+.at-pill.ghost {
+  color: var(--at-wall);
+  border: 1px solid var(--at-line);
+}

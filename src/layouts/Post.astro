@@ -81,29 +81,43 @@ const jsonLd = {
     border-radius: 6px;
   }
 
+  /* Text keeps a 720px measure. MDX components (class "x") style themselves and may break out to .wide or .bleed. */
   .prose {
-    max-width: 720px;
     font-size: 18px;
     line-height: 1.7;
   }
-  .prose :global(h1),
-  .prose :global(h2),
-  .prose :global(h3),
-  .prose :global(h4) {
+  .prose :global(> :not(.x)) {
+    max-width: 720px;
+  }
+  /* Breakouts for MDX components. .flowing swaps the left gutter for the indent, so
+     .wide pulls back to the gutter and .bleed to the edge of the page. */
+  .prose :global(> .wide) {
+    margin-block: 64px;
+    margin-left: calc(var(--gutter) - var(--indent));
+  }
+  .prose :global(> .bleed) {
+    margin-block: 72px;
+    margin-left: calc(-1 * var(--indent));
+    margin-right: calc(-1 * var(--gutter));
+  }
+  .prose :global(h1:not(.x *)),
+  .prose :global(h2:not(.x *)),
+  .prose :global(h3:not(.x *)),
+  .prose :global(h4:not(.x *)) {
     font-family: var(--display);
     font-weight: 500;
     letter-spacing: -0.02em;
     line-height: 1.15;
     margin: 2em 0 0.6em;
   }
-  .prose :global(h1),
-  .prose :global(h2) {
+  .prose :global(h1:not(.x *)),
+  .prose :global(h2:not(.x *)) {
     font-size: clamp(28px, 3vw, 36px);
   }
-  .prose :global(h3) {
+  .prose :global(h3:not(.x *)) {
     font-size: 24px;
   }
-  .prose :global(h4) {
+  .prose :global(h4:not(.x *)) {
     font-size: 20px;
   }
   .prose :global(:is(h1, h2, h3, h4) strong) {
@@ -112,19 +126,19 @@ const jsonLd = {
   .prose :global(> :first-child) {
     margin-top: 0;
   }
-  .prose :global(p),
-  .prose :global(ul),
-  .prose :global(ol) {
+  .prose :global(p:not(.x *)),
+  .prose :global(ul:not(.x *)),
+  .prose :global(ol:not(.x *)) {
     margin: 0 0 1.2em;
   }
-  .prose :global(li) {
+  .prose :global(li:not(.x *)) {
     margin: 0.3em 0;
   }
-  .prose :global(a) {
+  .prose :global(a:not(.x *)) {
     color: var(--pipeline-ink);
     text-underline-offset: 3px;
   }
-  .prose :global(img) {
+  .prose :global(img:not(.x *)) {
     display: block;
     max-width: 100%;
     height: auto;
@@ -132,14 +146,14 @@ const jsonLd = {
     border-radius: 12px;
     background: var(--surface);
   }
-  .prose :global(blockquote) {
+  .prose :global(blockquote:not(.x *)) {
     margin: 1.6em 0;
     padding: 0 0 0 1.4em;
     color: var(--ink-muted);
     font-style: italic;
     position: relative;
   }
-  .prose :global(blockquote)::before {
+  .prose :global(blockquote:not(.x *))::before {
     content: "\201C";
     position: absolute;
     left: -0.05em;
@@ -147,13 +161,13 @@ const jsonLd = {
     font: 500 2.4em/1 var(--display);
     color: var(--pipeline);
   }
-  .prose :global(:not(pre) > code) {
+  .prose :global(:not(pre) > code:not(.x *)) {
     font: 500 0.88em var(--mono);
     background: var(--surface);
     padding: 2px 6px;
     border-radius: 6px;
   }
-  .prose :global(pre) {
+  .prose :global(pre:not(.x *)) {
     margin: 1.6em 0;
     padding: 20px;
     border-radius: 12px;
@@ -161,7 +175,7 @@ const jsonLd = {
     overflow-x: auto;
     border: 1px solid var(--line);
   }
-  .prose :global(table) {
+  .prose :global(table:not(.x *)) {
     width: 100%;
     border-collapse: collapse;
     margin: 1.6em 0;
@@ -169,13 +183,13 @@ const jsonLd = {
     display: block;
     overflow-x: auto;
   }
-  .prose :global(th),
-  .prose :global(td) {
+  .prose :global(th:not(.x *)),
+  .prose :global(td:not(.x *)) {
     border-bottom: 1px solid var(--line);
     padding: 10px 12px;
     text-align: left;
   }
-  .prose :global(hr) {
+  .prose :global(hr:not(.x *)) {
     border: 0;
     border-top: 1px solid var(--line);
     margin: 3em 0;

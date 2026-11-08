@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig, fontProviders } from "astro/config";
 import sitemap from "@astrojs/sitemap";
+import mdx from "@astrojs/mdx";
 
 export default defineConfig({
   site: "https://romeralvarez.me",
@@ -14,6 +15,9 @@ export default defineConfig({
     { name: "Funnel Display", cssVariable: "--font-display", provider: fontProviders.google(), weights: [500] },
     { name: "Funnel Sans", cssVariable: "--font-sans", provider: fontProviders.google(), weights: [400, 500], styles: ["normal", "italic"] },
     { name: "Geist Mono", cssVariable: "--font-mono", provider: fontProviders.google(), weights: [500] },
+    // Alien Thai's own faces, loaded only by its blog components.
+    { name: "Big Shoulders", cssVariable: "--font-at-display", provider: fontProviders.google(), weights: [800] },
+    { name: "Hanken Grotesk", cssVariable: "--font-at-sans", provider: fontProviders.google(), weights: [400, 500] },
   ],
   markdown: {
     shikiConfig: { theme: "github-light", wrap: true },
@@ -36,5 +40,6 @@ export default defineConfig({
     sitemap({
       i18n: { defaultLocale: "en", locales: { en: "en", it: "it", es: "es" } },
     }),
+    mdx(),
   ],
 });

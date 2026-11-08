@@ -1,0 +1,133 @@
+---
+title: "Alien Thai: diseño, proceso, problemas e implementación"
+description: "Cómo hicimos la web de Alien Thai, un gimnasio de Muay Thai, jiu-jitsu y capoeira en Tegueste, Tenerife."
+pubDate: 2026-11-08
+tags: ["proyecto", "astro", "diseño"]
+draft: true
+---
+
+import { Portada, Mural, Paso, Paleta, Artes, Arte, Proceso, Etapa, Patada, WebEnVivo, Final } from "../../../components/blog/alien-thai";
+import hero from "../../../assets/blog/alien-thai/hero-landscape.avif";
+import mural from "../../../assets/blog/alien-thai/mural.webp";
+import muay from "../../../assets/blog/alien-thai/muay-thai.avif";
+import bjj from "../../../assets/blog/alien-thai/brazilian-jiu-jitsu.avif";
+import capoeira from "../../../assets/blog/alien-thai/capoeira.avif";
+import kick from "../../../assets/blog/alien-thai/kick.avif";
+import mapa from "../../../assets/blog/alien-thai/map-landscape.webp";
+
+{/* BORRADOR: el texto es provisional y sale de lo que ya dice la web de Alien Thai. Reescríbelo con tu voz antes de publicar. */}
+
+Esto empezó con un vídeo de un minuto en Instagram. Mizzian, que da Muay Thai en Tegueste, contando de dónde venía. Lo vi y pensé: a este gimnasio le hago yo la web.
+
+Lo que no sabía es todo lo que venía detrás. Una primera versión que quedó fea, un iPhone que no quería ver una película y una dirección que no sale en ningún mapa. Vamos por partes.
+
+<Portada
+  imagen={hero}
+  alt="Peleador de Muay Thai lanzando una patada delante del mural de Alien Thai"
+  lugar="Camino Viejo 56 · Tegueste · Tenerife"
+  titulo="Un mundo aparte."
+>
+  Muay Thai, jiu-jitsu brasileño y capoeira bajo el mismo techo.
+</Portada>
+
+## Un mundo aparte
+
+En el vídeo habla de Las Cruces, en Garachico, del rap, del Muay Thai, de cuando se fue de casa con 17 años y de las malas decisiones. Y en medio suelta esto: «El deporte siempre me ha ayudado a salir de la oscuridad». Con eso ya me tenía.
+
+{/* REVISAR: he supuesto que el vídeo que te movió es el de su historia (instagram.com/p/DVbRZQ8CBfZ). Si fue otro, cámbialo. */}
+
+En otro vídeo cuenta por qué se llama Alien Thai. Quería un sitio donde olvidarte de los problemas de este planeta, un mundo aparte. Esa frase se fue directa a la portada. Y su historia… su historia fue la sección que más guerra me dio, pero eso viene luego.
+
+Lo bueno es que casi todo ya estaba en el gimnasio. Solo había que ordenarlo.
+
+<Mural imagen={mural} alt="Dos luchadores delante del mural de aliens del gimnasio">
+  <Paso titulo="Un sitio para todos">Da igual quién seas, tu condición o tu nivel. Eso tenía que verse nada más entrar.</Paso>
+  <Paso titulo="Un mundo propio" foco="izquierda">El mural de la pared, con los aliens peleando, ya era Alien Thai. La web solo tenía que llevarlo a la pantalla.</Paso>
+  <Paso titulo="Tres artes" foco="derecha">Muay Thai con Mizzian, jiu-jitsu con Adriano De Oliveira y capoeira con Mestre Sobrancelha.</Paso>
+</Mural>
+
+Mural, nombre, historia. Tenía todo… menos una cosa. Y tardé en darme cuenta de lo mucho que pesaba.
+
+## De los boards al boceto
+
+La creatividad no me cayó del cielo. Fue más como entrenar: mirar mucho, probar, tirar casi todo y repetir lo que funcionaba.
+
+Me puse a mirar webs de todo tipo. De deportes de combate, de marcas de material, de estudios de diseño y hasta de cosas que no tienen nada que ver con pegarse. Las fui juntando por secciones, varias maneras de hacer lo mismo una al lado de la otra.
+
+Cada board me ayudaba a pensar una cosa concreta, cómo enseño los precios, cómo cuento una historia, y de ahí salía lo mío, a veces mezclando dos ideas. Todo en gris primero, pieza a pieza. El color, al final.
+
+<Proceso>
+  <Etapa seccion="nav" titulo="Un menú que no estorba">
+    Aquí manda la imagen. Menú escondido, logo en el centro y un solo botón: la clase de prueba.
+  </Etapa>
+  <Etapa seccion="hero" titulo="La primera pantalla">
+    Me quedé con dos ideas a la vez: un disco grande detrás del luchador, que luego acabó siendo el sol del mural, y lo de siempre que funciona, foto, titular y dos botones.
+  </Etapa>
+  <Etapa seccion="clases" titulo="Tres artes, tres fotos">
+    Iconos, tarjetas con texto o fotos de gente entrenando. Ganaron las fotos, sin duda.
+  </Etapa>
+  <Etapa seccion="precios" titulo="Precios que se leen de un vistazo">
+    Números grandes, un plan destacado y ya. Que no haya que pensar.
+  </Etapa>
+  <Etapa seccion="historia" titulo="Contar de dónde viene">
+    Nada de línea del tiempo. Capítulos, y al final su frase a pantalla completa, que hable él.
+  </Etapa>
+  <Etapa seccion="cierre" titulo="Un final con nombre propio">
+    El mapa para llegar y debajo el nombre, enorme, de lado a lado.
+  </Etapa>
+  <Etapa seccion="pintar" titulo="Y entonces, el color">
+    Con todo en su sitio, tocaba pintar. Y los colores ya estaban en el gimnasio: el tatami, la pared y el verde de los aliens. Dale al botón y lo ves en gris o pintado.
+  </Etapa>
+</Proceso>
+
+## La primera versión
+
+En gris todo cuadraba. Luego hice la primera versión de verdad, con un disco rojo y un botón para probar rojo o verde. Y quedó fea, para qué mentir.
+
+<WebEnVivo url="/blog/alien-thai/v1/index.html" titulo="Primera versión de la web de Alien Thai" barra="alien-thai · v1" />
+
+Ahí la tienes, abre el menú y prueba los colores. Ganó el verde, pero ni así. No parecía el gimnasio. Y ahí caí: no tenía imágenes propias. Tenía vídeos sueltos de Instagram, cada uno de su padre y de su madre.
+
+Entonces la pregunta cambió. Ya no era qué foto pongo, era cómo se tiene que ver Alien Thai. Los maestros en blanco y negro, con fondo de estudio. Los aliens del mural saliéndose de la pared, en 3D, para los precios. Hasta los números de la historia con la misma textura que los aliens, que nada pareciera de otra web.
+
+<Artes titulo={"Tres artes,\nun mundo."}>
+  <Arte imagen={muay} alt="Mizzian con guantes de Muay Thai" nombre="Muay Thai" detalle="Mizzian · lunes, miércoles y viernes" />
+  <Arte imagen={bjj} alt="Adriano De Oliveira con kimono" nombre="Brazilian Jiu-Jitsu" detalle="Adriano De Oliveira · martes y jueves" />
+  <Arte imagen={capoeira} alt="Mestre Sobrancelha en posición de capoeira" nombre="Capoeira" detalle="Mestre Sobrancelha · Força Luanda" />
+</Artes>
+
+## Pared, tatami y verde
+
+Con eso claro, el color salió solo. No había que inventarse nada, había que mirar: el negro verdoso del tatami, el blanco roto de la pared y el verde de los aliens. Toca un color y mira cómo cambia la web.
+
+<Paleta />
+
+## Elige tu asalto
+
+Los precios podían ser una tabla y ya. Pero no. Tres tarjetas, números grandes, el plan bueno en verde y en cada una un alien moviéndose.
+
+<Patada imagen={kick} alt="Alien lanzando una patada" />
+
+## Salir de la oscuridad
+
+Y llegamos a la sección que empezó todo esto. La historia de Mizzian en cuatro capítulos, con una peli que va avanzando según bajas: Garachico, su cara, el saco delante del mural y el otro lado del gimnasio.
+
+En el ordenador, perfecta. En el iPhone, congelada en la primera imagen. Justo en la parte que más me importaba. Al final era una línea de código, una. Encontrarla ya fue otra historia.
+
+> No me arrepiento de nada de lo que ha pasado, porque he aprendido de todas esas malas decisiones.
+
+## Camino Viejo 56
+
+Ya solo quedaba lo fácil, poner el gimnasio en el mapa. Pues no. El 56 no sale en ningún mapa, y el que yo tenía en la cabeza, oscuro como la web, no existía. Así que lo hice yo. Es el que ves al final.
+
+Más de veinte versiones después de aquella primera fea, aquí está. Entra y date una vuelta.
+
+<WebEnVivo url="https://romerenr.github.io/alien-thai/" titulo="Web de Alien Thai" />
+
+<Final
+  imagen={mapa}
+  cita="Pueden considerar este sitio su casa."
+  autor="Mizzian, fundador de Alien Thai"
+  web="https://romerenr.github.io/alien-thai/"
+  instagram="@alienthai_"
+/>

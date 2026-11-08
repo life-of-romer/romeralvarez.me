@@ -1,0 +1,103 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import "./alien-thai.css";
+
+interface Props {
+  imagen: ImageMetadata;
+  alt: string;
+}
+
+const { imagen, alt } = Astro.props;
+---
+
+<!-- The image stays pinned while the <Paso> children scroll past; each step reframes it. -->
+<section class="x wide mural">
+  <div class="pin" data-foco="centro">
+    <Image src={imagen} alt={alt} widths={[480, 960]} sizes="(min-width: 760px) 45vw, 100vw" />
+  </div>
+  <div class="steps">
+    <slot />
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".mural").forEach((mural) => {
+    const pin = mural.querySelector<HTMLElement>(".pin")!;
+    const steps = [...mural.querySelectorAll<HTMLElement>(".paso")];
+    steps.slice(1).forEach((s) => s.classList.add("dim"));
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          pin.dataset.foco = (e.target as HTMLElement).dataset.foco ?? "centro";
+          steps.forEach((s) => s.classList.toggle("dim", s !== e.target));
+        }),
+      { rootMargin: "-45% 0px -45% 0px" },
+    );
+    steps.forEach((s) => io.observe(s));
+  });
+</script>
+
+<style>
+  .mural {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 56px);
+  }
+  .pin {
+    position: sticky;
+    top: 96px;
+    align-self: start;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--at-tatami);
+  }
+  .pin img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+      transform 1.2s var(--ease),
+      object-position 1.2s var(--ease);
+  }
+  .pin[data-foco="izquierda"] img {
+    transform: scale(1.35);
+    object-position: 20% 30%;
+  }
+  .pin[data-foco="derecha"] img {
+    transform: scale(1.35);
+    object-position: 85% 40%;
+  }
+  .steps {
+    display: grid;
+    gap: 34vh;
+    padding-block: 12vh 22vh;
+  }
+  .steps :global(.paso.dim) {
+    opacity: 0.45;
+  }
+  @media (max-width: 760px) {
+    .mural {
+      grid-template-columns: 1fr;
+    }
+    .pin {
+      position: relative;
+      top: 0;
+      aspect-ratio: 16 / 10;
+    }
+    .steps {
+      gap: 16px;
+      padding: 0;
+    }
+    .steps :global(.paso.dim) {
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pin img {
+      transition: none;
+    }
+  }
+</style>
