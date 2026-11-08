@@ -1,0 +1,190 @@
+---
+import Base from "../../layouts/Base.astro";
+import AnnotatedSite from "./AnnotatedSite.astro";
+import ProjectsEnd from "./ProjectsEnd.astro";
+import { locales, t, type Locale } from "../../i18n";
+import { caseStudyUrl, projectsIndexUrl, projectUrl, type Project } from "../../lib/projects";
+import { SITE } from "../../site";
+
+interface Props {
+  project: Project;
+  locale: Locale;
+}
+
+const { project, locale } = Astro.props;
+const { name, intro, client, role, year, status, url, stack, tools, summary, caseStudyText } = project.data;
+const story = await caseStudyUrl(project, locale);
+const alternates = Object.fromEntries(locales.map((l) => [l, projectUrl(project, l)]));
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  name,
+  description: summary[locale],
+  inLanguage: locale,
+  url: new URL(projectUrl(project, locale), SITE.url).href,
+  dateCreated: String(year),
+  creator: { "@type": "Person", name: SITE.name, url: SITE.url },
+  sameAs: url,
+};
+---
+
+<Base locale={locale} title={`${name} · ${t(locale, "nav.projects")} · Romer Alvarez`} description={summary[locale]} alternates={alternates} jsonLd={jsonLd}>
+  <main id="main" class="wrap">
+    <a class="back" href={projectsIndexUrl(locale)}>{t(locale, "project.back")}</a>
+    <div class="head">
+      <h1>{name}</h1>
+      <div class="facts">
+        <p class="intro">{intro[locale]}</p>
+        <dl>
+          <dt class="label">{t(locale, "project.client")}</dt>
+          <dd>{client[locale]}</dd>
+          <dt class="label">{t(locale, "projects.role")}</dt>
+          <dd>{role[locale]}</dd>
+          <dt class="label">{t(locale, "project.year")}</dt>
+          <dd>{year}</dd>
+          <dt class="label">{t(locale, "project.status")}</dt>
+          <dd class="status">{status[locale]}</dd>
+        </dl>
+      </div>
+    </div>
+
+    <AnnotatedSite project={project} locale={locale} />
+
+    <section class="made">
+      <h2>{t(locale, "project.made")}</h2>
+      <div class="cols">
+        <div>
+          <h3 class="label">Stack</h3>
+          <ul>{stack.map(({ name, use }) => <li><strong>{name}</strong><span>{use[locale]}</span></li>)}</ul>
+        </div>
+        <div>
+          <h3 class="label">{t(locale, "project.tools")}</h3>
+          <ul>{tools.map(({ name, use }) => <li><strong>{name}</strong><span>{use[locale]}</span></li>)}</ul>
+        </div>
+      </div>
+    </section>
+
+    {
+      story && (
+        <section class="story">
+          <h2>{t(locale, "project.story")}</h2>
+          {caseStudyText && <p>{caseStudyText[locale]}</p>}
+          <a class="pill dark" href={story.href} hreflang={story.locale === locale ? undefined : story.locale} data-umami-event="case-study" data-umami-event-slug={project.id}>{t(locale, "project.storyCta")}</a>
+        </section>
+      )
+    }
+
+    <ProjectsEnd locale={locale} title={t(locale, "project.endTitle")} text={t(locale, "project.endText")} />
+  </main>
+</Base>
+
+<style>
+  main {
+    padding-block: 16px 0;
+  }
+  .back {
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    text-decoration: none;
+    padding-block: 8px;
+  }
+  .back:hover {
+    color: var(--ink);
+  }
+  .head {
+    display: grid;
+    gap: 24px;
+    margin: 16px 0 40px;
+  }
+  @media (min-width: 1100px) {
+    .head {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 56px;
+      align-items: end;
+    }
+  }
+  .intro {
+    margin: 0 0 24px;
+    max-width: 46ch;
+    font: 400 clamp(19px, 1.8vw, 22px)/1.45 var(--sans);
+    text-wrap: pretty;
+  }
+  dl {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 10px 16px;
+    margin: 0;
+    font-size: 15px;
+  }
+  dt {
+    padding-top: 3px;
+  }
+  dd {
+    margin: 0;
+  }
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .status::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--pipeline);
+    box-shadow: 0 0 0 4px var(--pipeline-soft);
+  }
+
+  .made,
+  .story {
+    padding-top: 120px;
+  }
+  .made h2,
+  .story h2 {
+    font-size: clamp(36px, 4.6vw, 64px);
+  }
+  .cols {
+    display: grid;
+    gap: 40px;
+  }
+  @media (min-width: 900px) {
+    .cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 56px;
+    }
+  }
+  .cols h3 {
+    margin: 0 0 8px;
+  }
+  .cols ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  .cols li {
+    display: grid;
+    grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
+    gap: 16px;
+    align-items: baseline;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .cols strong {
+    font: 500 22px/1.2 var(--display);
+    letter-spacing: -0.01em;
+  }
+  .cols span {
+    color: var(--ink-muted);
+  }
+  .story p {
+    margin: -16px 0 32px;
+    max-width: 52ch;
+    color: var(--ink-muted);
+  }
+</style>

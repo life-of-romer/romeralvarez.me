@@ -1,0 +1,52 @@
+---
+import Base from "../../layouts/Base.astro";
+import ProjectRow from "./ProjectRow.astro";
+import ProjectsEnd from "./ProjectsEnd.astro";
+import { locales, t, type Locale } from "../../i18n";
+import { getProjects, projectsIndexUrl } from "../../lib/projects";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const projects = await getProjects();
+const alternates = Object.fromEntries(locales.map((l) => [l, projectsIndexUrl(l)]));
+---
+
+<Base locale={locale} title={`${t(locale, "nav.projects")} · Romer Alvarez`} description={t(locale, "projects.page.description")} alternates={alternates}>
+  <main id="main" class="wrap">
+    <h1>{t(locale, "projects.page.title")}</h1>
+    <p class="lead">{t(locale, "projects.page.lead")}</p>
+    <ol class="list">
+      {
+        projects.map((project) => (
+          <li>
+            <ProjectRow project={project} locale={locale} level={2} />
+          </li>
+        ))
+      }
+    </ol>
+    <ProjectsEnd locale={locale} title={t(locale, "projects.page.endTitle")} text={t(locale, "projects.page.endText")} />
+  </main>
+</Base>
+
+<style>
+  main {
+    padding-block: 72px 0;
+  }
+  .lead {
+    margin: 24px 0 72px;
+    max-width: 38ch;
+    font: 400 clamp(20px, 2.2vw, 26px)/1.35 var(--sans);
+    color: var(--ink-muted);
+    text-wrap: pretty;
+  }
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 96px;
+  }
+</style>

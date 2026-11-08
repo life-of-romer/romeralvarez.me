@@ -1,13 +1,15 @@
 ---
 import { Image } from "astro:assets";
 import Browser from "./Browser.astro";
+import { t, type Locale } from "../../i18n";
 import type { Project } from "../../lib/projects";
 
 interface Props {
   project: Project;
+  locale: Locale;
 }
 
-const { project } = Astro.props;
+const { project, locale } = Astro.props;
 const { name, url, poster, posterAlt, features } = project.data;
 const frame = `live-${project.id}`;
 ---
@@ -17,19 +19,19 @@ const frame = `live-${project.id}`;
   The site loads only when asked (poster first). Each note is a link into the window: it targets the
   iframe by name and jumps to the section that proves the feature, so it works even before the script runs.
 -->
-<section class="annotated" aria-label={`La web de ${name}, en vivo`} data-annotated data-url={url}>
+<section class="annotated" aria-label={t(locale, "project.live").replace("{name}", name)} data-annotated data-url={url}>
   <div class="frame">
     <Browser url={url}>
       <div class="viewport" data-viewport>
-        <iframe name={frame} title={`Web de ${name}`} tabindex="-1"></iframe>
+        <iframe name={frame} title={t(locale, "project.frame").replace("{name}", name)} tabindex="-1"></iframe>
         <button class="poster" type="button" data-open>
-          <Image src={poster} alt={posterAlt} widths={[640, 960, 1280]} sizes="(min-width: 1100px) 900px, 100vw" loading="eager" fetchpriority="high" />
-          <span class="go pill cta" data-label-loading="Cargando la web…">Navegar la web aquí</span>
+          <Image src={poster} alt={posterAlt[locale]} widths={[640, 960, 1280]} sizes="(min-width: 1100px) 900px, 100vw" loading="eager" fetchpriority="high" />
+          <span class="go pill cta" data-label-loading={t(locale, "project.loading")}>{t(locale, "project.browse")}</span>
         </button>
       </div>
     </Browser>
     <p class="note">
-      Es la web real, no una captura. <a href={url} target="_blank" rel="noopener" data-umami-event="project-live" data-umami-event-slug={project.id}>Ábrela en una pestaña nueva ↗</a>
+      {t(locale, "project.real")} <a href={url} target="_blank" rel="noopener" data-umami-event="project-live" data-umami-event-slug={project.id}>{t(locale, "project.newTab")}</a>
     </p>
   </div>
   <ol class="notes">
@@ -37,9 +39,9 @@ const frame = `live-${project.id}`;
       features.map(({ title, text, anchor }) => (
         <li>
           <a href={`${url}#${anchor}`} target={frame} data-anchor={anchor} data-umami-event="project-feature" data-umami-event-anchor={anchor}>
-            <strong>{title}</strong>
-            <span>{text}</span>
-            <span class="jump" aria-hidden="true">Verlo en la web →</span>
+            <strong>{title[locale]}</strong>
+            <span>{text[locale]}</span>
+            <span class="jump" aria-hidden="true">{t(locale, "project.jump")}</span>
           </a>
         </li>
       ))

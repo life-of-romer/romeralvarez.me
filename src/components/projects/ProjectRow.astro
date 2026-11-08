@@ -13,18 +13,18 @@ interface Props {
 
 const { project, locale, level = 3 } = Astro.props;
 const { name, summary, role, url, poster, stack, tools } = project.data;
-const href = projectUrl(project);
+const href = projectUrl(project, locale);
 const Heading = `h${level}` as "h2" | "h3";
 ---
 
 <article class="project">
-  <a class="shot" href={href} hreflang="es" tabindex="-1" aria-hidden="true" data-umami-event="project" data-umami-event-slug={project.id} data-umami-event-place="poster">
+  <a class="shot" href={href} tabindex="-1" aria-hidden="true" data-umami-event="project" data-umami-event-slug={project.id} data-umami-event-place="poster">
     <Browser url={url}>
       <Image src={poster} alt="" widths={[480, 800, 1280]} sizes="(min-width: 1100px) 680px, 100vw" />
     </Browser>
   </a>
   <div class="body">
-    <Heading class="name"><a href={href} hreflang="es" data-umami-event="project" data-umami-event-slug={project.id} data-umami-event-place="title">{name}</a></Heading>
+    <Heading class="name"><a href={href} data-umami-event="project" data-umami-event-slug={project.id} data-umami-event-place="title">{name}</a></Heading>
     <p class="summary">{summary[locale]}</p>
     <dl>
       <dt class="label">{t(locale, "projects.role")}</dt>
@@ -35,7 +35,7 @@ const Heading = `h${level}` as "h2" | "h3";
       </dd>
     </dl>
     <p class="links">
-      <a class="pill dark" href={href} hreflang="es" data-umami-event="project" data-umami-event-slug={project.id} data-umami-event-place="button">{t(locale, "projects.view")}</a>
+      <a class="pill dark" href={href} data-umami-event="project" data-umami-event-slug={project.id} data-umami-event-place="button">{t(locale, "projects.view")}</a>
       <a href={url} target="_blank" rel="noopener" data-umami-event="project-live" data-umami-event-slug={project.id}>{t(locale, "projects.open")} ↗</a>
     </p>
   </div>

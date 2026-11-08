@@ -1,40 +1,89 @@
 name: Alien Thai
 order: 1
 year: 2026
-client: Gimnasio de Muay Thai, jiu-jitsu y capoeira · Tegueste, Tenerife
+client:
+  es: Gimnasio de Muay Thai, jiu-jitsu y capoeira · Tegueste, Tenerife
+  en: Muay Thai, jiu-jitsu and capoeira gym · Tegueste, Tenerife
+  it: Palestra di Muay Thai, jiu-jitsu e capoeira · Tegueste, Tenerife
 role:
   es: Diseño, desarrollo y despliegue
   en: Design, development and deployment
   it: Design, sviluppo e deploy
-status: En producción
+status:
+  es: En producción
+  en: Live
+  it: In produzione
 url: https://romerenr.github.io/alien-thai/
 poster: ../../assets/projects/alien-thai.png
-posterAlt: Portada de la web de Alien Thai, un peleador de Muay Thai delante del mural de aliens con el título Un mundo aparte.
+posterAlt:
+  es: Portada de la web de Alien Thai, un peleador de Muay Thai delante del mural de aliens con el título Un mundo aparte.
+  en: Home page of the Alien Thai website, a Muay Thai fighter in front of the alien mural under the title Un mundo aparte.
+  it: Home del sito di Alien Thai, un lottatore di Muay Thai davanti al murale degli alieni con il titolo Un mundo aparte.
 summary:
   es: La web de un gimnasio de Muay Thai, jiu-jitsu y capoeira en Tenerife, de la primera idea a producción.
   en: The website of a Muay Thai, jiu-jitsu and capoeira gym in Tenerife, from the first idea to production.
   it: Il sito di una palestra di Muay Thai, jiu-jitsu e capoeira a Tenerife, dalla prima idea alla produzione.
-intro: La web de un gimnasio en Tegueste. La hice entera, del primer boceto a la versión que está en producción, más de veinte versiones después.
+intro:
+  es: La web de un gimnasio en Tegueste. La hice entera, del primer boceto a la versión que está en producción, más de veinte versiones después.
+  en: The website of a gym in Tegueste. I built all of it, from the first sketch to the version in production, more than twenty versions later.
+  it: Il sito di una palestra a Tegueste. L'ho fatto da cima a fondo, dal primo schizzo alla versione in produzione, più di venti versioni dopo.
 caseStudy: alien-thai
+caseStudyText:
+  es: Los boards, la primera versión fea, el iPhone que no quería ver la peli y el mapa que no existía. Todo el proceso, paso a paso.
+  en: The boards, the ugly first version, the iPhone that wouldn't play the film and the map that didn't exist. The whole process, step by step.
+  it: Le board, la prima versione brutta, l'iPhone che non voleva vedere il film e la mappa che non esisteva. Tutto il processo, passo dopo passo.
 features:
-  - title: Aliens que se mueven
-    text: Cada plan de precios tiene su alien del mural en vídeo, que solo se reproduce cuando lo ves.
-    anchor: precios
-  - title: Una peli que avanza al bajar
-    text: La historia de Mizzian en cuatro capítulos, con un vídeo que sigue al scroll. También en iPhone.
-    anchor: historia
-  - title: Un mapa que no existía
-    text: El 56 del Camino Viejo no sale en ningún mapa, así que lo dibujé, oscuro como la web.
-    anchor: contacto
+  - anchor: precios
+    title:
+      es: Aliens que se mueven
+      en: Aliens that move
+      it: Alieni che si muovono
+    text:
+      es: Cada plan de precios tiene su alien del mural en vídeo, que solo se reproduce cuando lo ves.
+      en: Each pricing plan has its own alien from the mural on video, playing only while you can see it.
+      it: Ogni piano dei prezzi ha il suo alieno del murale in video, che parte solo quando lo vedi.
+  - anchor: historia
+    title:
+      es: Una peli que avanza al bajar
+      en: A film that plays as you scroll
+      it: Un film che avanza scorrendo
+    text:
+      es: La historia de Mizzian en cuatro capítulos, con un vídeo que sigue al scroll. También en iPhone.
+      en: Mizzian's story in four chapters, with a video that follows the scroll. On iPhone too.
+      it: La storia di Mizzian in quattro capitoli, con un video che segue lo scroll. Anche su iPhone.
+  - anchor: contacto
+    title:
+      es: Un mapa que no existía
+      en: A map that didn't exist
+      it: Una mappa che non esisteva
+    text:
+      es: El 56 del Camino Viejo no sale en ningún mapa, así que lo dibujé, oscuro como la web.
+      en: Number 56 on Camino Viejo isn't on any map, so I drew it, dark like the site.
+      it: Il 56 del Camino Viejo non compare su nessuna mappa, così l'ho disegnata, scura come il sito.
 stack:
   - name: Astro
-    use: Web estática y rápida
+    use:
+      es: Web estática y rápida
+      en: Fast static site
+      it: Sito statico e veloce
   - name: TypeScript
-    use: Vídeo con scroll y animaciones, sin librerías
+    use:
+      es: Vídeo con scroll y animaciones, sin librerías
+      en: Scroll-driven video and animations, no libraries
+      it: Video legato allo scroll e animazioni, senza librerie
   - name: GitHub Pages
-    use: Hosting y despliegue
+    use:
+      es: Hosting y despliegue
+      en: Hosting and deployment
+      it: Hosting e deploy
 tools:
   - name: Higgsfield
-    use: Imágenes y vídeo
+    use:
+      es: Imágenes y vídeo
+      en: Images and video
+      it: Immagini e video
   - name: Claude Code
-    use: Desarrollo
+    use:
+      es: Desarrollo
+      en: Development
+      it: Sviluppo

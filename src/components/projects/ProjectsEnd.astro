@@ -1,19 +1,21 @@
 ---
 import { SITE } from "../../site";
+import { t, type Locale } from "../../i18n";
 
 interface Props {
+  locale: Locale;
   title: string;
   text: string;
 }
 
-const { title, text } = Astro.props;
+const { locale, title, text } = Astro.props;
 ---
 
 <section class="end">
   <h2>{title}</h2>
   <p>{text}</p>
   <div class="reach">
-    <a class="pill cta big" href={`mailto:${SITE.email}`} data-umami-event="email" data-umami-event-place="projects">Hablemos</a>
+    <a class="pill cta big" href={`mailto:${SITE.email}`} data-umami-event="email" data-umami-event-place="projects">{t(locale, "cta")}</a>
     <a href={SITE.linkedin} rel="me" data-umami-event="profile" data-umami-event-network="linkedin" data-umami-event-place="projects">LinkedIn</a>
     <a href={SITE.github} rel="me" data-umami-event="profile" data-umami-event-network="github" data-umami-event-place="projects">GitHub</a>
   </div>
