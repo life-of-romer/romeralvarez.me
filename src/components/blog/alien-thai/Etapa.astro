@@ -1,0 +1,362 @@
+---
+import "./proceso.css";
+
+type Seccion = "nav" | "hero" | "clases" | "precios" | "historia" | "cierre" | "pintar";
+
+interface Props {
+  seccion: Seccion;
+  titulo: string;
+}
+
+const { seccion, titulo } = Astro.props;
+
+/* Each board shows the options we weighed for that part of the site, drawn as wireframes
+   (no names, no screenshots). `si` marks the ones that made it into the page; sometimes two. */
+type Op = { si?: boolean; html: string };
+const N = '<span class="l s"></span>';
+const opciones: Partial<Record<Seccion, Op[]>> = {
+  nav: [
+    { html: `<div class="row bar"><i class="c dot a"></i><span class="f1 row lk">${N}${N}${N}</span><span class="p a"></span></div><span class="im fill"></span>` },
+    { html: `<div class="row bar"><span class="l s"></span><span class="f1 row lk ctr">${N}${N}${N}</span><span class="l s"></span></div><span class="im fill"></span>` },
+    { si: true, html: `<div class="row bar"><span class="burger"></span><span class="f1 ctr"><span class="l t logo"></span></span><span class="p"></span></div><span class="im fill"></span>` },
+  ],
+  hero: [
+    { si: true, html: `<div class="disc"><i class="c a"></i><span class="im fig"></span></div><div class="col hl"><span class="l t"></span><span class="l t m"></span></div>` },
+    { html: `<div class="dark"><span class="streak"></span><span class="l t s"></span></div>` },
+    { si: true, html: `<span class="im fill"></span><div class="col over"><span class="l t"></span><span class="l t m"></span><div class="row"><span class="p a"></span><span class="p"></span></div></div>` },
+  ],
+  clases: [
+    { html: `<div class="row three">${'<div class="col f1"><span class="im sq"></span><span class="l"></span><span class="l s"></span></div>'.repeat(3)}</div>` },
+    { si: true, html: `<div class="row three">${'<div class="f1 tall im"><span class="l s lab"></span></div>'.repeat(3)}</div>` },
+    { html: `<div class="row three">${'<div class="col f1 ctr"><i class="c ic a"></i><span class="l"></span></div>'.repeat(3)}</div>` },
+  ],
+  precios: [
+    { html: `<div class="row three">${'<div class="col f1 card"><span class="l t s"></span><span class="l"></span><span class="l"></span><span class="p"></span></div>'.repeat(3)}</div>` },
+    { si: true, html: `<div class="row three"><div class="col f1 card"><span class="l t s"></span><span class="l"></span></div><div class="col f1 card a"><span class="l t s"></span><span class="l"></span></div><div class="col f1 card"><span class="l t s"></span><span class="l"></span></div></div>` },
+    { si: true, html: `<div class="row three big">${'<div class="col f1"><span class="num"></span><span class="l s"></span></div>'.repeat(3)}</div>` },
+  ],
+  historia: [
+    { html: `<div class="tl"><span class="axis"></span><div class="row">${'<div class="col f1"><i class="c dot a"></i><span class="l t s"></span><span class="l"></span></div>'.repeat(3)}</div></div>` },
+    { si: true, html: `<div class="row"><span class="vert a"></span><div class="col f1 list">${'<div class="row"><span class="num sm"></span><span class="f1 col"><span class="l"></span><span class="l s"></span></span></div>'.repeat(3)}</div></div>` },
+    { si: true, html: `<span class="im fill"></span><div class="col over ctr"><span class="l t"></span><span class="l t"></span><span class="l t s"></span></div>` },
+  ],
+  cierre: [
+    { si: true, html: `<span class="im map"></span><div class="row"><div class="col f1"><span class="l"></span><span class="l s"></span></div><div class="col f1"><span class="l"></span><span class="l"></span><span class="p a"></span></div></div>` },
+    { si: true, html: `<div class="row three">${'<div class="col f1"><span class="l s"></span><span class="l"></span><span class="l"></span></div>'.repeat(3)}</div><span class="word"></span>` },
+    { html: `<div class="col">${'<span class="l t"></span>'.repeat(4)}</div>` },
+  ],
+};
+const ops = opciones[seccion];
+const letras = ["A", "B", "C", "D"];
+---
+
+<div class="etapa" data-seccion={seccion} data-estado="antes">
+  <p class="eyebrow">{ops ? `${ops.length} opciones` : "Último paso"}</p>
+  <b class="tit">{titulo}</b>
+  <div class="body"><slot /></div>
+  {
+    ops && (
+      <div class="board" aria-hidden="true">
+        {ops.map((o, i) => (
+          <figure class:list={["op", { si: o.si }]}>
+            <div class="th" set:html={o.html} />
+            <figcaption>
+              {letras[i]}
+              {o.si && <em>a la web</em>}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .etapa {
+    max-width: 46ch;
+    transition: opacity 0.4s;
+  }
+  .eyebrow {
+    margin: 0 0 6px;
+    font: 500 11px/1 var(--mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .tit {
+    display: block;
+    margin-bottom: 8px;
+    font: 500 24px/1.15 var(--display);
+    letter-spacing: -0.02em;
+  }
+  .body {
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  .body :global(p) {
+    margin: 0;
+  }
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .op {
+    margin: 0;
+    display: grid;
+    gap: 6px;
+    transition:
+      opacity 0.5s var(--ease),
+      transform 0.5s var(--ease);
+  }
+  .th {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    aspect-ratio: 4 / 3;
+    padding: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--surface);
+    transition:
+      border-color 0.5s var(--ease),
+      box-shadow 0.5s var(--ease);
+  }
+  figcaption {
+    display: flex;
+    justify-content: space-between;
+    font: 500 10px/1 var(--mono);
+    letter-spacing: 0.1em;
+    color: var(--ink-muted);
+  }
+  figcaption em {
+    font-style: normal;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  /* Choosing: the discarded ones step back, the chosen ones get an ink frame and their label. */
+  .etapa:not([data-estado="antes"]) .op:not(.si) {
+    opacity: 0.35;
+    transform: scale(0.96);
+  }
+  .etapa:not([data-estado="antes"]) .op.si .th {
+    border-color: var(--ink);
+    box-shadow: 0 0 0 1px var(--ink);
+  }
+  .etapa:not([data-estado="antes"]) .op.si figcaption {
+    color: var(--ink);
+  }
+  .etapa:not([data-estado="antes"]) .op.si em {
+    opacity: 1;
+  }
+
+  /* Thumbnail pieces. */
+  .th :global(.fill) {
+    flex: 1;
+  }
+  .th :global(.bar) {
+    gap: 8%;
+    height: 10px;
+  }
+  .th :global(.bar .lk) {
+    gap: 8%;
+  }
+  .th :global(.bar .lk .l) {
+    width: 18%;
+  }
+  .th :global(.ctr) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .th :global(.dot) {
+    width: 9px;
+  }
+  .th :global(.bar .p) {
+    width: 22%;
+    height: 8px;
+  }
+  .th :global(.logo) {
+    width: 46%;
+  }
+  .th :global(.burger) {
+    width: 12px;
+    height: 7px;
+    border-block: 2px solid var(--sk-strong);
+  }
+  .th :global(.disc) {
+    position: relative;
+    flex: 1;
+    display: grid;
+    place-items: center;
+  }
+  .th :global(.disc .c) {
+    width: 62%;
+    position: absolute;
+  }
+  .th :global(.disc .fig) {
+    position: relative;
+    width: 26%;
+    height: 92%;
+  }
+  .th :global(.hl) {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    width: 46%;
+  }
+  .th :global(.over) {
+    position: absolute;
+    inset: auto 10px 10px;
+    width: 58%;
+  }
+  .th :global(.over.ctr) {
+    inset: 0;
+    width: auto;
+    padding: 18%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .th :global(.over .row) {
+    margin-top: 3px;
+    gap: 6px;
+  }
+  .th :global(.over .p) {
+    width: 34%;
+    background-color: var(--surface);
+  }
+  .th :global(.over .p.a) {
+    background: var(--ink-muted);
+  }
+  .th :global(.dark) {
+    flex: 1;
+    display: grid;
+    place-items: center;
+    border-radius: 3px;
+    background: var(--ink);
+    --sk-strong: rgb(255 255 255 / 0.5);
+  }
+  .th :global(.streak) {
+    position: absolute;
+    width: 70%;
+    height: 22%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(255 255 255 / 0.35), transparent);
+  }
+  .th :global(.three) {
+    flex: 1;
+    gap: 6px;
+    align-items: stretch;
+  }
+  .th :global(.sq) {
+    aspect-ratio: 1;
+  }
+  .th :global(.tall) {
+    display: flex;
+    align-items: flex-end;
+    padding: 4px;
+  }
+  .th :global(.tall .lab) {
+    width: 70%;
+    background: var(--surface);
+  }
+  .th :global(.ic) {
+    width: 40%;
+    margin-bottom: 4px;
+  }
+  .th :global(.col.ctr) {
+    flex-direction: column;
+  }
+  .th :global(.card) {
+    justify-content: flex-end;
+    padding: 5px;
+    border: 1px solid var(--sk);
+    border-radius: 3px;
+  }
+  .th :global(.card.a) {
+    border-color: transparent;
+  }
+  .th :global(.card .p) {
+    width: 70%;
+    height: 7px;
+  }
+  .th :global(.big) {
+    align-items: center;
+  }
+  .th :global(.num) {
+    display: block;
+    width: 70%;
+    height: 26px;
+    border-radius: 3px;
+    background: var(--sk-strong);
+  }
+  .th :global(.num.sm) {
+    width: 14px;
+    height: 14px;
+  }
+  .th :global(.tl) {
+    position: relative;
+    flex: 1;
+    display: grid;
+    align-content: center;
+  }
+  .th :global(.tl .axis) {
+    position: absolute;
+    inset: 50% 0 auto;
+    margin-top: -18px;
+    height: 1px;
+    background: var(--sk-strong);
+  }
+  .th :global(.tl .row) {
+    gap: 6px;
+    align-items: start;
+  }
+  .th :global(.vert) {
+    align-self: stretch;
+    width: 8px;
+    border-radius: 2px;
+  }
+  .th :global(.list) {
+    gap: 7px;
+  }
+  .th :global(.list .row) {
+    gap: 6px;
+  }
+  .th :global(.map) {
+    flex: 1.4;
+  }
+  .th :global(.map + .row) {
+    align-items: end;
+  }
+  .th :global(.word) {
+    display: block;
+    flex: 1;
+    margin-top: 4px;
+    border-radius: 3px;
+    background: var(--sk-strong);
+  }
+
+  @media (max-width: 760px) {
+    .etapa {
+      max-width: none;
+    }
+    .board {
+      gap: 8px;
+    }
+    .th {
+      padding: 6px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .op,
+    .th,
+    figcaption em {
+      transition: none;
+    }
+  }
+</style>

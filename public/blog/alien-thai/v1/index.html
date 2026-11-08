@@ -1,0 +1,528 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="es" data-accent="rojo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alien Thai: hero y navegación (v1, versión B)</title>
+<meta name="description" content="Alien Thai, escuela de Muay Thai en Tegueste (Tenerife). Un mundo aparte. Reserva tu clase de prueba.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Big+Shoulders+Display:wght@700;900&family=JetBrains+Mono:wght@400;500&family=Kanit:wght@500&display=swap" rel="stylesheet">
+<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('pre');setTimeout(()=>document.documentElement.classList.remove('pre'),2500)}</script>
+<link rel="preload" as="image" href="assets/img/fighter.webp" fetchpriority="high">
+<style>
+:root{
+  --ink:#0b0b0a;
+  --ink-2:#141412;
+  --bone:#efece4;
+  --bone-dim:#b9b5aa;
+  --line:rgba(239,236,228,.22);
+  --accent:#d7261e;
+  --on-accent:#fff7f2;
+  --accent-ink:#ff5a4f; /* accent legible as text on black */
+  --display:"Big Shoulders Display", "Archivo Narrow", sans-serif;
+  --sans:"Archivo", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, monospace;
+  --nav-h:84px;
+  --gutter:clamp(16px, 3.2vw, 48px);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+html[data-accent="verde"]{
+  --accent:#3cf06e;
+  --on-accent:#06140a;
+  --accent-ink:#3cf06e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--ink);color:var(--bone);-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);background:var(--ink);line-height:1.5;overflow-x:hidden}
+body.menu-open{overflow:hidden}
+::selection{background:var(--accent);color:var(--on-accent)}
+html{scrollbar-color:#3a3a36 var(--ink)}
+a{color:inherit}
+img{display:block;max-width:100%}
+:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:2px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.mark{color:var(--accent-ink);font-family:var(--mono);font-size:.92em;letter-spacing:0}
+
+/* ───────── NAV ───────── */
+.nav{
+  position:fixed;inset:0 0 auto 0;z-index:50;height:var(--nav-h);
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  padding:0 var(--gutter);
+  transition:height .5s var(--ease), background-color .5s var(--ease), border-color .5s var(--ease);
+  border-bottom:1px solid transparent;
+}
+.nav.is-solid{--nav-h:62px;background:rgba(11,11,10,.96);border-bottom-color:var(--line)}
+.nav__burger{
+  justify-self:start;display:inline-flex;align-items:center;gap:14px;
+  background:none;border:0;color:var(--bone);cursor:pointer;padding:10px 6px 10px 0;
+  font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+}
+.nav__burger svg{width:30px;height:14px;overflow:visible}
+.nav__burger line{stroke:currentColor;stroke-width:1.5;transition:transform .4s var(--ease);transform-origin:center}
+.nav__burger:hover line:last-child{transform:scaleX(.6);transform-origin:left}
+.nav__logo{
+  font:900 30px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;
+  display:flex;align-items:center;gap:.32em;transition:font-size .5s var(--ease);
+}
+.nav.is-solid .nav__logo{font-size:24px}
+.nav__logo i{display:block;width:.42em;height:.42em;border-radius:50%;background:var(--accent)}
+.nav__cta{
+  justify-self:end;text-decoration:none;
+  font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  padding:12px 16px;border:1px solid var(--line);border-radius:999px;
+  display:inline-flex;align-items:center;gap:10px;
+  transition:border-color .3s, background-color .3s, color .3s;
+}
+.nav__cta::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.nav__cta:hover{border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
+.nav__cta:hover::before{background:var(--on-accent)}
+
+/* ───────── MENU OVERLAY ───────── */
+.menu{
+  position:fixed;inset:0;z-index:60;background:#050505;color:var(--bone);
+  display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);grid-template-rows:auto 1fr auto;
+  padding:0 var(--gutter) clamp(20px,3vw,40px);
+  visibility:hidden;opacity:0;transition:opacity .35s var(--ease), visibility 0s linear .35s;
+}
+.menu.is-open{visibility:visible;opacity:1;transition:opacity .35s var(--ease)}
+.menu__top{grid-column:1/-1;height:84px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
+.menu__close{justify-self:start;display:inline-flex;align-items:center;gap:14px;background:none;border:0;color:var(--bone);cursor:pointer;padding:10px 6px 10px 0;font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.menu__close svg{width:22px;height:22px}
+.menu__close line{stroke:currentColor;stroke-width:1.5}
+.menu > nav{align-self:center}
+.menu__links{list-style:none;display:flex;flex-direction:column;gap:.02em;padding:2vh 0}
+.menu__links a{
+  display:inline-flex;align-items:baseline;gap:.35em;text-decoration:none;
+  font:900 clamp(56px, 9.4vh, 104px)/.92 var(--display);text-transform:uppercase;letter-spacing:.005em;
+  color:var(--bone);transition:color .25s;
+}
+.menu__links a span{display:inline-block}
+.menu__links a small{font:400 12px/1 var(--mono);letter-spacing:.12em;color:var(--bone-dim);transform:translateY(-1.6em)}
+.menu__links a:hover,.menu__links a:focus-visible{color:var(--accent-ink)}
+.menu__aside{align-self:center;justify-self:end;width:min(100%,380px);display:flex;flex-direction:column;gap:14px}
+.menu__aside figure{position:relative;aspect-ratio:874/1200;max-height:52vh;overflow:hidden;border-radius:2px;background:var(--ink-2)}
+.menu__aside img{width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+.menu__aside figcaption{font:400 11px/1.5 var(--mono);letter-spacing:.08em;color:var(--bone-dim);text-transform:uppercase}
+.menu__foot{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:12px 40px;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:18px;font:400 12px/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--bone-dim)}
+.menu__foot a{text-decoration:none;color:var(--bone)}
+.menu__foot .btn{font-family:var(--sans)}
+
+/* ───────── HERO ───────── */
+.hero{
+  position:relative;min-height:100svh;height:100svh;max-height:1100px;overflow:hidden;isolation:isolate;
+  display:grid;grid-template-rows:var(--nav-h) 1fr auto;
+}
+.hero__ground{position:absolute;inset:0;z-index:-2;overflow:hidden}
+.hero__ground img{
+  width:100%;height:100%;object-fit:cover;object-position:30% 40%;
+  opacity:.16;filter:contrast(1.1);transform:scale(1.04);
+}
+.hero__ground::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(90deg, var(--ink) 18%, rgba(11,11,10,.55) 55%, rgba(11,11,10,.2) 100%),
+  linear-gradient(0deg, var(--ink) 0%, transparent 30%);}
+
+.stage{position:absolute;z-index:-1;inset:0;pointer-events:none}
+.disc-wrap{
+  position:absolute;
+  --d:min(72vh, 50vw);
+  width:var(--d);height:var(--d);
+  left:67.5%;top:calc(var(--nav-h) + 10px + (100% - var(--nav-h) - 56px) / 2);
+  transform:translate(-50%,-50%);
+}
+.disc-wrap > svg{position:absolute;inset:-10%;width:120%;height:120%;overflow:visible}
+.disc{fill:var(--accent);transition:fill .5s var(--ease)}
+.rope{fill:none;stroke:var(--bone);stroke-width:1.1;opacity:.7;vector-effect:non-scaling-stroke}
+.rope--thin{stroke-width:.8;opacity:.4}
+.ring-text{font:500 15px var(--mono);letter-spacing:.32em;fill:var(--bone);opacity:.62;text-transform:uppercase}
+.fighter{
+  position:absolute;
+  height:calc(100% - var(--nav-h) - 40px);
+  bottom:40px;left:67.5%;
+  transform:translateX(-58%);
+  aspect-ratio:1080/1918;
+}
+.fighter img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 30px 40px rgba(0,0,0,.45))}
+
+.thai-vert{
+  position:absolute;right:calc(var(--gutter) - 4px);top:50%;transform:translateY(-50%);
+  writing-mode:vertical-rl;text-orientation:sideways;
+  font:500 clamp(22px,3vh,30px)/1 "Kanit", sans-serif;letter-spacing:.08em;color:var(--bone);opacity:.8;
+  display:flex;align-items:center;gap:.7em;
+}
+.thai-vert small{font:400 10px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase;opacity:.75}
+
+.hero__copy{
+  grid-row:2;align-self:center;
+  padding:0 var(--gutter);
+  width:min(52%, 760px);
+  display:flex;flex-direction:column;gap:clamp(18px,2.6vh,30px);
+}
+.headline{
+  font:900 clamp(96px, min(13.2vw, 21vh), 210px)/.84 var(--display);
+  text-transform:uppercase;letter-spacing:-.005em;
+  text-wrap:balance;
+}
+.headline .ln{display:block;overflow:hidden;padding-bottom:.04em;margin-bottom:-.04em}
+.headline .ln > span{display:block}
+.headline .ln:last-child > span{color:var(--bone)}
+.headline em{font-style:normal;color:var(--accent-ink)}
+.lede{max-width:34ch;font-size:clamp(16px,1.25vw,19px);line-height:1.5;color:var(--bone)}
+.lede q{quotes:"«" "»"}
+.lede cite{display:block;margin-top:8px;font:400 11px/1.4 var(--mono);font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:var(--bone-dim)}
+.ctas{display:flex;flex-wrap:wrap;align-items:center;gap:14px 28px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;text-decoration:none;
+  background:var(--accent);color:var(--on-accent);
+  font:600 15px/1 var(--sans);letter-spacing:.02em;
+  padding:19px 26px;border-radius:999px;border:0;cursor:pointer;
+  box-shadow:0 10px 30px -12px rgba(0,0,0,.6);
+  transition:transform .3s var(--ease), background-color .5s var(--ease), color .5s var(--ease);
+}
+.btn svg{width:16px;height:16px;transition:transform .3s var(--ease)}
+.btn:hover{transform:translateY(-2px)}
+.btn:hover svg{transform:translateX(3px)}
+.link{
+  display:inline-flex;align-items:center;gap:10px;text-decoration:none;
+  font:500 15px/1 var(--sans);color:var(--bone);
+  padding:10px 0;border-bottom:1px solid var(--line);transition:border-color .3s;
+}
+.link:hover{border-color:var(--bone)}
+.link svg{width:14px;height:14px}
+
+.strip{
+  grid-row:3;position:relative;z-index:2;
+  display:flex;align-items:center;gap:clamp(16px,2.4vw,36px);
+  margin:0 var(--gutter);height:56px;border-top:1px solid var(--line);background:var(--ink);
+  font:400 11.5px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--bone-dim);
+  white-space:nowrap;
+}
+.strip b{font-weight:500;color:var(--bone)}
+.strip .sep{width:4px;height:4px;border-radius:50%;background:var(--bone-dim);opacity:.6;flex:none}
+.strip .push{margin-left:auto}
+.strip a{text-decoration:none;color:var(--bone)}
+.strip a:hover{color:var(--accent-ink)}
+.prajioud{width:46px;height:16px;flex:none;overflow:visible}
+.prajioud path{fill:none;stroke:var(--bone);stroke-width:1;opacity:.8}
+
+/* ───────── NEXT BLOCK ───────── */
+.next{position:relative;background:var(--ink);border-top:1px solid var(--line);padding:clamp(56px,7vw,110px) var(--gutter) clamp(64px,8vw,120px);
+  display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(32px,5vw,80px);align-items:end}
+.next blockquote{font:700 clamp(40px,5.4vw,84px)/.95 var(--display);text-transform:uppercase;letter-spacing:.005em;text-wrap:balance}
+.next blockquote span{color:var(--accent-ink)}
+.next figure{position:relative;overflow:hidden;border-radius:2px;aspect-ratio:4/5;max-height:70vh}
+.next figure img{width:100%;height:100%;object-fit:cover}
+.next p{margin-top:28px;max-width:52ch;color:var(--bone-dim);font-size:17px}
+.next cite{display:block;margin-top:22px;font:400 11px/1.4 var(--mono);font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:var(--bone-dim)}
+
+/* ───────── PROTOTYPE TOGGLE ───────── */
+.proto{
+  position:fixed;right:12px;bottom:70px;z-index:40;display:flex;align-items:center;gap:2px;
+  background:rgba(20,20,18,.9);border:1px solid var(--line);border-radius:999px;padding:3px;
+  font:400 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--bone-dim);
+}
+.proto span{padding:0 8px 0 9px}
+.proto button{background:none;border:0;color:var(--bone-dim);font:inherit;letter-spacing:inherit;text-transform:inherit;padding:7px 10px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.proto button i{width:8px;height:8px;border-radius:50%}
+.proto button[aria-pressed="true"]{background:#2a2a27;color:var(--bone)}
+
+/* ───────── MOBILE ───────── */
+@media (max-width: 760px){
+  :root{--nav-h:64px}
+  .nav.is-solid{--nav-h:54px}
+  .nav__burger span,.menu__close span{display:none}
+  .nav{grid-template-columns:auto 1fr auto}
+  .nav__logo{font-size:21px;justify-self:center}
+  .nav.is-solid .nav__logo{font-size:20px}
+  .nav__cta{padding:9px 11px;font-size:10px;letter-spacing:.08em;white-space:nowrap}
+  .nav__cta::before{display:none}
+  .hero{grid-template-rows:var(--nav-h) 1fr auto auto;height:auto;min-height:100svh;max-height:none}
+  .stage{position:relative;grid-row:2;inset:auto;height:clamp(300px, 46svh, 420px);margin-top:4px}
+  .disc-wrap{--d:min(70vw, 38svh);left:50%;top:50%}
+  .fighter{height:100%;bottom:0;left:50%;transform:translateX(-56%)}
+  .hero__ground img{object-position:40% 30%}
+  .hero__ground::after{background:linear-gradient(0deg, var(--ink) 40%, rgba(11,11,10,.4) 100%)}
+  .thai-vert{top:calc(var(--nav-h) + 24svh);right:6px;font-size:17px}
+  .thai-vert small{display:none}
+  .hero__copy{grid-row:3;width:100%;gap:16px;padding-top:6px;padding-bottom:18px}
+  .headline{font-size:clamp(64px, 21vw, 96px)}
+  .lede{font-size:15px}
+  .lede cite{display:none}
+  .ctas{gap:12px 20px}
+  .btn{padding:17px 18px;font-size:14.5px;gap:10px}
+  .link{font-size:14.5px}
+  .strip{grid-row:4;height:44px;font-size:10px;gap:12px;letter-spacing:.1em}
+  .strip .hide-m{display:none}
+  .strip .push{margin-left:auto}
+  .prajioud{width:34px}
+  .menu{grid-template-columns:1fr;grid-template-rows:auto 1fr auto}
+  .menu__top{height:64px}
+  .menu__links a{font-size:clamp(46px, 7.4svh, 64px)}
+  .menu__links a small{display:none}
+  .menu__aside{position:absolute;right:var(--gutter);top:calc(64px + 2svh);width:26vw;opacity:.9}
+  .menu__aside figure{max-height:none}
+  .menu__aside figcaption{display:none}
+  .menu__foot{flex-direction:column;align-items:stretch;gap:12px}
+  .menu__foot .btn{width:100%}
+  .next{grid-template-columns:1fr}
+  .next figure{aspect-ratio:4/3}
+  .proto{bottom:auto;top:calc(var(--nav-h) + 6px);right:auto;left:10px;padding:2px}
+  .proto span{display:none}
+  .proto button{padding:6px;font-size:0;gap:0}
+  .proto button i{width:9px;height:9px}
+}
+@media (max-width: 760px) and (max-height: 700px){
+  .stage{height:38svh}
+}
+
+/* ───────── MOTION ───────── */
+.pre .hero{opacity:0}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition-duration:.01ms !important;animation:none !important}
+}
+</style>
+</head>
+<body>
+<a class="sr-only" href="#main">Saltar al contenido</a>
+
+<header class="nav" id="nav">
+  <button class="nav__burger" id="menuBtn" aria-expanded="false" aria-controls="menu">
+    <svg viewBox="0 0 30 14" aria-hidden="true"><line x1="0" y1="2" x2="30" y2="2"/><line x1="0" y1="12" x2="30" y2="12"/></svg>
+    <span>Menú</span>
+  </button>
+  <!-- LOGO PROVISIONAL: logotipo tipográfico «ALIEN THAI». Sustituir por el logo oficial (cabeza alien) cuando esté disponible. -->
+  <a class="nav__logo" href="#top" aria-label="Alien Thai, inicio">Alien<i aria-hidden="true"></i>Thai</a>
+  <a class="nav__cta" href="#reserva">Clase de prueba</a>
+</header>
+
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menú principal" hidden>
+  <div class="menu__top">
+    <button class="menu__close" id="menuClose">
+      <svg viewBox="0 0 22 22" aria-hidden="true"><line x1="3" y1="3" x2="19" y2="19"/><line x1="19" y1="3" x2="3" y2="19"/></svg>
+      <span>Cerrar</span>
+    </button>
+    <span class="nav__logo" aria-hidden="true">Alien<i></i>Thai</span>
+    <span></span>
+  </div>
+  <nav aria-label="Secciones">
+    <ul class="menu__links">
+      <li><a href="#clases"><span>Clases</span><small>Thai · K-1</small></a></li>
+      <li><a href="#horarios"><span>Horarios</span><small>L · X · V</small></a></li>
+      <li><a href="#precios"><span>Precios</span></a></li>
+      <li><a href="#equipo"><span>Equipo</span><small>Mizzian</small></a></li>
+      <li><a href="#veladas"><span>Veladas</span><small>Seminarios</small></a></li>
+      <li><a href="#contacto"><span>Contacto</span></a></li>
+    </ul>
+  </nav>
+  <aside class="menu__aside" aria-hidden="true">
+    <figure>
+      <img src="assets/img/mural-alien-azul.webp" alt="" width="874" height="1200" loading="lazy" decoding="async">
+    </figure>
+    <figcaption>Del mural de la sala · Alien Thai, Tegueste</figcaption>
+  </aside>
+  <div class="menu__foot">
+    <span>Camino Viejo, 56 · Tegueste · Tenerife</span>
+    <a href="https://www.instagram.com/alienthai/" target="_blank" rel="noopener">@alienthai</a>
+    <a class="btn" href="#reserva" data-close>Reserva tu clase de prueba</a>
+  </div>
+</div>
+
+<main id="main">
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="hero__ground" aria-hidden="true">
+      <img src="assets/img/mural-alien-bn.webp" alt="" width="1080" height="1459" decoding="async">
+    </div>
+
+    <div class="stage" aria-hidden="false">
+      <div class="disc-wrap" data-par="0.12">
+        <svg viewBox="0 0 1000 1000" aria-hidden="true" id="discSvg">
+          <defs><path id="ringPath" d="M500,500 m-478,0 a478,478 0 1,1 956,0 a478,478 0 1,1 -956,0"/></defs>
+          <circle class="disc" id="disc" cx="500" cy="500" r="400"/>
+          <!-- mongkhon: cordón trenzado (dos hebras generadas en JS) + remate -->
+          <g id="mongkhon"></g>
+          <g transform="rotate(-62 500 500)"><text class="ring-text" id="ringText"><textPath href="#ringPath" startOffset="0">Wai Kru · Las ocho armas · Dos puños · Dos codos · Dos rodillas · Dos piernas</textPath></text></g>
+        </svg>
+      </div>
+      <div class="fighter" data-par="0.05">
+        <img src="assets/img/fighter.webp" srcset="assets/img/fighter-800.webp 540w, assets/img/fighter.webp 1080w" sizes="(max-width:760px) 60vw, 34vw"
+             alt="Mizzian lanza una patada al saco en la sala de Alien Thai" width="1080" height="1918" fetchpriority="high" decoding="async">
+      </div>
+    </div>
+
+    <p class="thai-vert" aria-label="Muay Thai, en tailandés">มวยไทย<small>Muay Thai</small></p>
+
+    <div class="hero__copy" data-par="-0.08">
+      <h1 class="headline" id="hero-title" aria-label="Un mundo aparte">
+        <span class="ln"><span>Un mundo</span></span>
+        <span class="ln"><span>aparte<em>.</em></span></span>
+      </h1>
+      <p class="lede">
+        <q>Un lugar donde olvidar los problemas de este planeta.</q> Muay Thai en Tegueste para cualquier nivel: da igual quién seas.
+        <cite>Mizzian, fundador de Alien Thai</cite>
+      </p>
+      <div class="ctas" id="reserva">
+        <a class="btn" href="#contacto">Reserva tu clase de prueba
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
+        <a class="link" href="#horarios">Ver horarios
+          <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1v11M2 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></a>
+      </div>
+    </div>
+
+    <div class="strip" role="list" aria-label="Datos del gimnasio">
+      <svg class="prajioud" viewBox="0 0 46 16" aria-hidden="true"><path d="M0 6h20M0 10h20M26 6h20M26 10h20M20 4c3-3 6 3 3 4s-3 4 0 4 3-3 3-4"/></svg>
+      <span role="listitem"><b>Tenerife</b><span class="hide-m"> · Tegueste</span></span><span class="sep"></span>
+      <span role="listitem"><b>Muay Thai</b> · K-1</span><span class="sep hide-m"></span>
+      <span role="listitem" class="hide-m">L · X · V · mañana y tarde <span class="mark">[Horas exactas]</span></span>
+      <a role="listitem" class="push" href="https://www.instagram.com/alienthai/" target="_blank" rel="noopener">@alienthai</a>
+    </div>
+  </section>
+
+  <section class="next" id="clases" aria-label="Para quién es Alien Thai">
+    <div>
+      <blockquote>No es un sitio para matones. <span>No hace falta que seas un tipo duro.</span></blockquote>
+      <p>Habrá gente que quiera pelear, gente que quiera más seguridad y gente que solo quiera hacer deporte. Las clases son para todo tipo de personas y niveles.</p>
+      <cite>Mizzian · reel «Las clases»</cite>
+    </div>
+    <figure>
+      <img src="assets/img/sala-sacos-bn.webp" alt="Fila de sacos de gota en la sala de Alien Thai" width="1080" height="1267" loading="lazy" decoding="async">
+    </figure>
+  </section>
+</main>
+
+<div class="proto" role="group" aria-label="Prototipo: color de acento">
+  <span>Acento</span>
+  <button type="button" data-set="rojo" aria-pressed="true" aria-label="Acento A: rojo"><i style="background:#d7261e"></i>A Rojo</button>
+  <button type="button" data-set="verde" aria-pressed="false" aria-label="Acento B: verde"><i style="background:#3cf06e"></i>B Verde</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script>
+(() => {
+  const root = document.documentElement;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Accent toggle (prototype only). ?acento=verde also works. */
+  const setAccent = v => {
+    root.dataset.accent = v;
+    document.querySelectorAll('.proto button').forEach(b => b.setAttribute('aria-pressed', b.dataset.set === v));
+    try { localStorage.setItem('at-accent', v); } catch (e) {}
+  };
+  let saved = new URLSearchParams(location.search).get('acento');
+  if (!saved) { try { saved = localStorage.getItem('at-accent'); } catch (e) {} }
+  if (saved === 'verde' || saved === 'rojo') setAccent(saved);
+  document.querySelectorAll('.proto button').forEach(b => b.addEventListener('click', () => setAccent(b.dataset.set)));
+
+  /* Mongkhon: two braided strands around the disc, plus the tail. */
+  const g = document.getElementById('mongkhon');
+  const NS = 'http://www.w3.org/2000/svg';
+  const strand = (phase, cls) => {
+    const R = 438, A = 7, waves = 64, steps = 720;
+    let d = '';
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps * Math.PI * 2;
+      const r = R + A * Math.sin(t * waves + phase);
+      const x = 500 + r * Math.cos(t - Math.PI / 2), y = 500 + r * Math.sin(t - Math.PI / 2);
+      d += (i ? 'L' : 'M') + x.toFixed(1) + ',' + y.toFixed(1);
+    }
+    const p = document.createElementNS(NS, 'path');
+    p.setAttribute('d', d); p.setAttribute('class', cls);
+    g.appendChild(p); return p;
+  };
+  const s1 = strand(0, 'rope'), s2 = strand(Math.PI, 'rope');
+  const inner = document.createElementNS(NS, 'circle');
+  Object.entries({cx:500, cy:500, r:418, class:'rope rope--thin'}).forEach(([k,v]) => inner.setAttribute(k, v));
+  g.appendChild(inner);
+  // tail: the mongkhon's two cords leaving the ring at the back of the head
+  const tail = document.createElementNS(NS, 'path');
+  tail.setAttribute('d', 'M196,844 C168,885 140,915 104,936 M210,856 C186,898 164,925 134,950');
+  tail.setAttribute('class', 'rope');
+  g.appendChild(tail);
+  const strokes = [s1, s2, inner, tail];
+
+  /* Nav: solid + compact on scroll; parallax layers. */
+  const nav = document.getElementById('nav');
+  const layers = [...document.querySelectorAll('[data-par]')];
+  const mobile = matchMedia('(max-width: 760px)');
+  let ticking = false;
+  const onScroll = () => {
+    const y = scrollY;
+    nav.classList.toggle('is-solid', y > 40);
+    if (!reduce && !mobile.matches && y < innerHeight * 1.2) {
+      layers.forEach(el => {
+        const k = parseFloat(el.dataset.par);
+        const base = el.classList.contains('disc-wrap') ? 'translate(-50%,-50%) ' : el.classList.contains('fighter') ? 'translateX(-46%) ' : '';
+        el.style.transform = base + `translate3d(0,${(y * k).toFixed(1)}px,0)` + (el.classList.contains('disc-wrap') ? ` scale(${1 + y * 0.00018})` : '');
+      });
+    }
+    ticking = false;
+  };
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, {passive:true});
+  onScroll();
+
+  /* Menu: full-screen overlay, focus trap, Esc to close. */
+  const menu = document.getElementById('menu');
+  const openBtn = document.getElementById('menuBtn');
+  const closeBtn = document.getElementById('menuClose');
+  const main = document.getElementById('main');
+  const focusables = () => [...menu.querySelectorAll('a[href], button:not([disabled])')];
+  let menuTl;
+  const openMenu = () => {
+    menu.hidden = false;
+    requestAnimationFrame(() => menu.classList.add('is-open'));
+    openBtn.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('menu-open');
+    main.inert = true; nav.inert = true;
+    if (window.gsap && !reduce) {
+      menuTl && menuTl.kill();
+      menuTl = gsap.timeline()
+        .fromTo('.menu__links li', {yPercent: 70, opacity: 0}, {yPercent: 0, opacity: 1, duration: .7, ease: 'expo.out', stagger: .055}, .05)
+        .fromTo('.menu__aside', {opacity: 0, x: 24}, {opacity: 1, x: 0, duration: .8, ease: 'expo.out'}, .2)
+        .fromTo('.menu__foot', {opacity: 0}, {opacity: 1, duration: .5}, .35);
+    }
+    setTimeout(() => closeBtn.focus(), 30);
+  };
+  const closeMenu = () => {
+    menu.classList.remove('is-open');
+    openBtn.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('menu-open');
+    main.inert = false; nav.inert = false;
+    setTimeout(() => { if (!menu.classList.contains('is-open')) menu.hidden = true; }, 360);
+    openBtn.focus();
+  };
+  openBtn.addEventListener('click', openMenu);
+  closeBtn.addEventListener('click', closeMenu);
+  menu.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e => {
+    if (!menu.classList.contains('is-open')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeMenu(); return; }
+    if (e.key === 'Tab') {
+      const f = focusables(), first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* Entrance (≤1.6 s): disc → photo revealed from the disc → headline lines → mongkhon drawn. */
+  const intro = () => {
+    if (reduce || !window.gsap) return;
+    strokes.forEach(p => { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; });
+    const fighterImg = document.querySelector('.fighter img');
+    gsap.timeline({defaults: {ease: 'expo.out'}})
+      .from('#disc', {scale: .2, transformOrigin: '50% 50%', duration: .9}, 0)
+      .fromTo(fighterImg, {clipPath: 'circle(0% at 50% 48%)'}, {clipPath: 'circle(75% at 50% 48%)', duration: 1.0, ease: 'power3.inOut', clearProps: 'clipPath'}, .2)
+      .from('.headline .ln > span', {yPercent: 105, duration: .9, stagger: .1}, .35)
+      .to(strokes, {strokeDashoffset: 0, duration: .9, ease: 'power2.inOut', stagger: .06}, .45)
+      .from('#ringText', {opacity: 0, rotate: -12, transformOrigin: '500px 500px', duration: 1.0}, .5)
+      .from(['.lede', '.ctas', '.thai-vert'], {opacity: 0, y: 14, duration: .7, stagger: .06}, .75)
+      .from('.strip', {opacity: 0, duration: .6}, .95)
+      .from('.nav > *', {opacity: 0, y: -8, duration: .6, stagger: .05}, .1);
+  };
+  const start = () => { root.classList.remove('pre'); intro(); };
+  if (document.readyState === 'loading') addEventListener('DOMContentLoaded', start); else start();
+})();
+</script>
+</body>
+</html>
+
+</body></html>

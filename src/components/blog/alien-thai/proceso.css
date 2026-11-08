@@ -1,0 +1,67 @@
+/* Wireframe vocabulary shared by <Proceso> (the page being assembled) and <Etapa> (the boards
+   of options). Everything is grey bars until .page[data-pintado="true"] paints it as the gym. */
+.proceso {
+  --sk: rgb(17 19 24 / 0.13);
+  --sk-strong: rgb(17 19 24 / 0.32);
+  --sk-line: rgb(17 19 24 / 0.22);
+}
+
+.proceso .row {
+  display: flex;
+  gap: 6%;
+  align-items: center;
+}
+.proceso .col {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+.proceso .f1 {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Bars, titles, pills, circles and image boxes (the crossed rectangle of every wireframe). */
+.proceso .l {
+  display: block;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--sk);
+}
+.proceso .l.t {
+  height: 10px;
+  background: var(--sk-strong);
+}
+.proceso .l.s {
+  width: 45%;
+}
+.proceso .l.m {
+  width: 70%;
+}
+.proceso .p {
+  display: block;
+  width: 30%;
+  height: 9px;
+  border-radius: 99px;
+  border: 1px solid var(--sk-strong);
+}
+.proceso .p.a,
+.proceso .a {
+  background: var(--sk-strong);
+}
+.proceso .c {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--sk);
+}
+.proceso .im {
+  display: block;
+  min-height: 0;
+  background:
+    linear-gradient(to top right, transparent calc(50% - 0.5px), var(--sk-line) 50%, transparent calc(50% + 0.5px)),
+    linear-gradient(to top left, transparent calc(50% - 0.5px), var(--sk-line) 50%, transparent calc(50% + 0.5px)),
+    var(--sk);
+  border-radius: 3px;
+}

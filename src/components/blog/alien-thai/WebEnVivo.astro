@@ -2,10 +2,12 @@
 interface Props {
   url: string;
   titulo: string;
+  /** Text for the address bar; defaults to the url without protocol. */
+  barra?: string;
 }
 
-const { url, titulo } = Astro.props;
-const host = url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+const { url, titulo, barra } = Astro.props;
+const host = barra ?? url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 ---
 
 <!--
@@ -50,12 +52,16 @@ const host = url.replace(/^https?:\/\//, "").replace(/\/$/, "");
       }),
     );
     new ResizeObserver(fit).observe(screen);
+    // On a phone, open on the phone view: the scaled desktop is too small to read there.
+    if (matchMedia("(max-width: 760px)").matches) root.querySelector<HTMLButtonElement>('[data-dev="phone"]')?.click();
   });
 </script>
 
 <style>
+  /* minmax(0, 1fr): the 1280px iframe must not widen the track it is scaled to fit. */
   .live {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     justify-items: center;
     gap: 18px;
   }
