@@ -1,0 +1,40 @@
+name: Alien Thai
+order: 1
+year: 2026
+client: Gimnasio de Muay Thai, jiu-jitsu y capoeira · Tegueste, Tenerife
+role:
+  es: Diseño, desarrollo y despliegue
+  en: Design, development and deployment
+  it: Design, sviluppo e deploy
+status: En producción
+url: https://romerenr.github.io/alien-thai/
+poster: ../../assets/projects/alien-thai.png
+posterAlt: Portada de la web de Alien Thai, un peleador de Muay Thai delante del mural de aliens con el título Un mundo aparte.
+summary:
+  es: La web de un gimnasio de Muay Thai, jiu-jitsu y capoeira en Tenerife, de la primera idea a producción.
+  en: The website of a Muay Thai, jiu-jitsu and capoeira gym in Tenerife, from the first idea to production.
+  it: Il sito di una palestra di Muay Thai, jiu-jitsu e capoeira a Tenerife, dalla prima idea alla produzione.
+intro: La web de un gimnasio en Tegueste. La hice entera, del primer boceto a la versión que está en producción, más de veinte versiones después.
+caseStudy: alien-thai
+features:
+  - title: Aliens que se mueven
+    text: Cada plan de precios tiene su alien del mural en vídeo, que solo se reproduce cuando lo ves.
+    anchor: precios
+  - title: Una peli que avanza al bajar
+    text: La historia de Mizzian en cuatro capítulos, con un vídeo que sigue al scroll. También en iPhone.
+    anchor: historia
+  - title: Un mapa que no existía
+    text: El 56 del Camino Viejo no sale en ningún mapa, así que lo dibujé, oscuro como la web.
+    anchor: contacto
+stack:
+  - name: Astro
+    use: Web estática y rápida
+  - name: TypeScript
+    use: Vídeo con scroll y animaciones, sin librerías
+  - name: GitHub Pages
+    use: Hosting y despliegue
+tools:
+  - name: Higgsfield
+    use: Imágenes y vídeo
+  - name: Claude Code
+    use: Desarrollo

@@ -7,6 +7,8 @@ import { SITE } from "../site";
 import { formatDate, getPosts, postSlug, postUrl } from "../lib/blog";
 import { Image } from "astro:assets";
 import photo from "../assets/romer.png";
+import ProjectRow from "./projects/ProjectRow.astro";
+import { getProjects } from "../lib/projects";
 
 interface Props {
   locale: Locale;
@@ -32,6 +34,9 @@ const path: { n: 1 | 2 | 3 | 4; tags: [string, IconName?][] }[] = [
 
 // The latest articles. They are written in Spanish, whatever the page language.
 const posts = (await getPosts("es")).slice(0, 3);
+
+// Projects lead to their own pages, in Spanish like the blog.
+const projects = (await getProjects()).slice(0, 2);
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -83,6 +88,23 @@ const jsonLd = {
             ))
           }
         </div>
+      </div>
+    </section>
+
+    <section class="block" id="projects" data-node="90">
+      <div class="wrap flowing">
+        <h2>{t(locale, "projects.title")}</h2>
+        <p class="intro">{t(locale, "projects.text")}</p>
+        <ul class="projects">
+          {
+            projects.map((project) => (
+              <li>
+                <ProjectRow project={project} locale={locale} />
+              </li>
+            ))
+          }
+        </ul>
+        <a class="more" href="/es/proyectos/" hreflang="es" data-umami-event="all-projects">{t(locale, "projects.all")} →</a>
       </div>
     </section>
 
@@ -465,6 +487,13 @@ const jsonLd = {
     height: 14px;
   }
 
+  .projects {
+    list-style: none;
+    margin: 0 0 40px;
+    padding: 0;
+    display: grid;
+    gap: 72px;
+  }
   .intro {
     margin: -16px 0 32px;
     color: var(--ink-muted);

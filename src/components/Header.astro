@@ -11,6 +11,7 @@ const { locale, alternates } = Astro.props;
 const home = localePath(locale);
 const links = [
   { href: `${home}#services`, label: t(locale, "nav.services") },
+  { href: `${home}#projects`, label: t(locale, "nav.projects") },
   { href: `${home}#path`, label: t(locale, "nav.path") },
   { href: `${home}#writing`, label: t(locale, "nav.writing") },
   { href: `${home}#contact`, label: t(locale, "nav.contact") },

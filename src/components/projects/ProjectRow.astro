@@ -1,0 +1,126 @@
+---
+import { Image } from "astro:assets";
+import Browser from "./Browser.astro";
+import { t, type Locale } from "../../i18n";
+import { projectUrl, type Project } from "../../lib/projects";
+
+interface Props {
+  project: Project;
+  locale: Locale;
+  /** Heading level: h3 inside the home section, h2 on the projects page. */
+  level?: 2 | 3;
+}
+
+const { project, locale, level = 3 } = Astro.props;
+const { name, summary, role, url, poster, stack, tools } = project.data;
+const href = projectUrl(project);
+const Heading = `h${level}` as "h2" | "h3";
+---
+
+<article class="project">
+  <a class="shot" href={href} hreflang="es" tabindex="-1" aria-hidden="true" data-umami-event="project" data-umami-event-slug={project.id} data-umami-event-place="poster">
+    <Browser url={url}>
+      <Image src={poster} alt="" widths={[480, 800, 1280]} sizes="(min-width: 1100px) 680px, 100vw" />
+    </Browser>
+  </a>
+  <div class="body">
+    <Heading class="name"><a href={href} hreflang="es" data-umami-event="project" data-umami-event-slug={project.id} data-umami-event-place="title">{name}</a></Heading>
+    <p class="summary">{summary[locale]}</p>
+    <dl>
+      <dt class="label">{t(locale, "projects.role")}</dt>
+      <dd>{role[locale]}</dd>
+      <dt class="label">Stack</dt>
+      <dd>
+        <ul class="tags">{[...stack, ...tools].map(({ name }) => <li>{name}</li>)}</ul>
+      </dd>
+    </dl>
+    <p class="links">
+      <a class="pill dark" href={href} hreflang="es" data-umami-event="project" data-umami-event-slug={project.id} data-umami-event-place="button">{t(locale, "projects.view")}</a>
+      <a href={url} target="_blank" rel="noopener" data-umami-event="project-live" data-umami-event-slug={project.id}>{t(locale, "projects.open")} ↗</a>
+    </p>
+  </div>
+</article>
+
+<style>
+  .project {
+    display: grid;
+    gap: 28px;
+  }
+  @media (min-width: 1100px) {
+    .project {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: 48px;
+      align-items: center;
+    }
+  }
+  .shot {
+    display: block;
+    transition: transform 0.5s var(--ease);
+  }
+  .shot:hover {
+    transform: translateY(-4px);
+  }
+  .shot :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+  .name {
+    margin: 0 0 12px;
+    font: 500 clamp(32px, 3.6vw, 48px)/1.05 var(--display);
+    letter-spacing: -0.03em;
+  }
+  .name a {
+    text-decoration: none;
+  }
+  .name a:hover {
+    color: var(--pipeline-ink);
+  }
+  .summary {
+    margin: 0 0 24px;
+    max-width: 44ch;
+    color: var(--ink-muted);
+    text-wrap: pretty;
+  }
+  dl {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 12px 16px;
+    margin: 0 0 28px;
+    font-size: 15px;
+  }
+  dt {
+    padding-top: 3px;
+  }
+  dd {
+    margin: 0;
+  }
+  .tags {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tags li {
+    font: 500 11px/1 var(--mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--surface);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 24px;
+    margin: 0;
+  }
+  .links a:not(.pill) {
+    font-weight: 500;
+  }
+</style>

@@ -1,0 +1,52 @@
+# Product
+
+<!-- impeccable:product-schema 1 -->
+
+## Platform
+
+web
+
+## Users
+
+Two audiences, weighted equally:
+
+- **Prospective clients** (businesses that need a website, product or platform): they should leave thinking "I want this for my business" and write to Romer.
+- **Recruiters and engineering teams**: they should see technical judgement, the stack, and what Romer personally did on each piece of work, then get in touch.
+
+## Product Purpose
+
+Personal site of Romer Alvarez, Software Engineer working remotely. It presents what he builds (products, tools, platforms), how he got here, what he writes, and turns visitors into conversations (email, LinkedIn, GitHub).
+
+## Positioning
+
+A backend and cloud-platform engineer (Kubernetes on AWS, Terraform, observability, AI agents in production at RatedPower/Enverus; Java/Spring Boot at PwC) who also ships finished, designed products end to end for real clients.
+
+## Operating Context
+
+- Astro site, statically built, trilingual (en, es, it) via `src/i18n`. Blog posts are written in Spanish only.
+- Analytics via Umami (cookieless) with `data-umami-event` attributes on key links.
+- Content collections live in `src/content`; the blog uses MDX for posts with custom components.
+
+## Capabilities and Constraints
+
+- Projects section: a short block on the home page that leads to a dedicated `/projects` page with one page per project.
+- Each project should show technologies, features, Romer's role, and link to the live result where one exists.
+- Only one project exists so far: Alien Thai. The format must look complete with one project and scale to a handful.
+- Open: whether project pages are translated or Spanish-only like the blog.
+
+## Brand Commitments
+
+- Voice: first person, direct, short sentences, no corporate filler.
+- Name "Romer Alvarez"; contact email and profiles in `src/site.ts`.
+
+## Evidence on Hand
+
+- Alien Thai: website for a Muay Thai, Brazilian jiu-jitsu and capoeira gym in Tegueste, Tenerife. Draft case study at `src/content/blog/es/` (MDX, `draft: true`, text marked provisional), components in `src/components/blog/alien-thai/`, images in `src/assets/blog/alien-thai/`, and an archived first version at `public/blog/alien-thai/v1/`.
+- No testimonials, metrics, or client quotes exist. Do not invent them.
+
+## Product Principles
+
+1. Show the real work, not claims about it: live links, real screenshots, real stack.
+2. Make Romer's own role explicit on every project.
+3. Every page ends in a way to get in touch.
+4. One project done well beats a padded grid.

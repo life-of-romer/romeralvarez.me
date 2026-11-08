@@ -1,0 +1,299 @@
+---
+import { Image } from "astro:assets";
+import Browser from "./Browser.astro";
+import type { Project } from "../../lib/projects";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const { name, url, poster, posterAlt, features } = project.data;
+const frame = `live-${project.id}`;
+---
+
+<!--
+  The project's real site in a browser window, with its features pinned beside it on the orange line.
+  The site loads only when asked (poster first). Each note is a link into the window: it targets the
+  iframe by name and jumps to the section that proves the feature, so it works even before the script runs.
+-->
+<section class="annotated" aria-label={`La web de ${name}, en vivo`} data-annotated data-url={url}>
+  <div class="frame">
+    <Browser url={url}>
+      <div class="viewport" data-viewport>
+        <iframe name={frame} title={`Web de ${name}`} tabindex="-1"></iframe>
+        <button class="poster" type="button" data-open>
+          <Image src={poster} alt={posterAlt} widths={[640, 960, 1280]} sizes="(min-width: 1100px) 900px, 100vw" loading="eager" fetchpriority="high" />
+          <span class="go pill cta" data-label-loading="Cargando la web…">Navegar la web aquí</span>
+        </button>
+      </div>
+    </Browser>
+    <p class="note">
+      Es la web real, no una captura. <a href={url} target="_blank" rel="noopener" data-umami-event="project-live" data-umami-event-slug={project.id}>Ábrela en una pestaña nueva ↗</a>
+    </p>
+  </div>
+  <ol class="notes">
+    {
+      features.map(({ title, text, anchor }) => (
+        <li>
+          <a href={`${url}#${anchor}`} target={frame} data-anchor={anchor} data-umami-event="project-feature" data-umami-event-anchor={anchor}>
+            <strong>{title}</strong>
+            <span>{text}</span>
+            <span class="jump" aria-hidden="true">Verlo en la web →</span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<script>
+  const DESK = { w: 1280, h: 800 };
+  document.querySelectorAll<HTMLElement>("[data-annotated]").forEach((root) => {
+    const url = root.dataset.url!;
+    const viewport = root.querySelector<HTMLElement>("[data-viewport]")!;
+    const frame = viewport.querySelector("iframe")!;
+    const poster = viewport.querySelector<HTMLButtonElement>("[data-open]")!;
+    const go = poster.querySelector<HTMLElement>(".go")!;
+    const notes = [...root.querySelectorAll<HTMLAnchorElement>("[data-anchor]")];
+    const wide = matchMedia("(min-width: 760px)");
+
+    // On wide screens the site renders at desktop size and is scaled down to fit, so the real
+    // desktop layout shows. On phones it renders at the window's own width.
+    const fit = () => {
+      if (!wide.matches) {
+        frame.style.cssText = "";
+        viewport.style.height = "";
+        return;
+      }
+      const scale = viewport.clientWidth / DESK.w;
+      frame.style.cssText = `width:${DESK.w}px;height:${DESK.h}px;transform:scale(${scale});transform-origin:0 0`;
+    };
+
+    // Jumping to a section inside the iframe makes the browser scroll this page too, to reveal it.
+    // Hold the page where it should be for a moment, unless the reader scrolls themselves.
+    const hold = (y: number) => {
+      const until = performance.now() + 1500;
+      let stop = false;
+      const release = () => (stop = true);
+      ["wheel", "touchstart", "keydown"].forEach((e) => addEventListener(e, release, { once: true, passive: true }));
+      const keep = () => {
+        if (stop) return;
+        if (Math.abs(scrollY - y) > 1) scrollTo(scrollX, y);
+        if (performance.now() < until) requestAnimationFrame(keep);
+      };
+      keep();
+    };
+
+    const open = (anchor?: string) => {
+      const target = anchor ? `${url}#${anchor}` : url;
+      // Below the window on phones: bring the window back into view.
+      const box = viewport.getBoundingClientRect();
+      hold(wide.matches ? scrollY : Math.max(0, scrollY + box.top - 80));
+      if (!frame.getAttribute("src")) {
+        go.textContent = go.dataset.labelLoading!;
+        poster.setAttribute("aria-busy", "true");
+        frame.addEventListener("load", () => root.classList.add("live"), { once: true });
+      }
+      frame.src = target;
+      frame.removeAttribute("tabindex");
+      notes.forEach((n) => (n.dataset.anchor === anchor ? n.setAttribute("aria-current", "true") : n.removeAttribute("aria-current")));
+    };
+
+    poster.addEventListener("click", () => open());
+    notes.forEach((n) =>
+      n.addEventListener("click", (e) => {
+        e.preventDefault();
+        open(n.dataset.anchor);
+      }),
+    );
+
+    new ResizeObserver(fit).observe(viewport);
+    wide.addEventListener("change", fit);
+  });
+</script>
+
+<style>
+  .annotated {
+    display: grid;
+    gap: 32px;
+  }
+  @media (min-width: 1100px) {
+    .annotated {
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 56px;
+      align-items: start;
+    }
+  }
+
+  .viewport {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+  }
+  @media (max-width: 759px) {
+    .live .viewport {
+      aspect-ratio: auto;
+      height: min(75vh, 640px);
+    }
+  }
+  /* Out of the flow: the 1280px desktop render must never size the window it is scaled into. */
+  iframe {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #0d0f0c;
+  }
+  .poster {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: #0d0f0c;
+    cursor: pointer;
+    transition:
+      opacity 0.6s var(--ease),
+      visibility 0.6s;
+  }
+  .poster :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 0.6s var(--ease);
+  }
+  .poster:hover :global(img),
+  .poster:focus-visible :global(img) {
+    filter: brightness(0.75);
+  }
+  .poster:focus-visible {
+    outline: 2px solid var(--pipeline);
+    outline-offset: -4px;
+  }
+  .go {
+    position: relative;
+    box-shadow: 0 10px 30px -8px rgb(0 0 0 / 0.5);
+  }
+  .poster[aria-busy] .go {
+    background: var(--surface);
+  }
+  .live .poster {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .note {
+    margin: 14px 0 0;
+    font-size: 15px;
+    color: var(--ink-muted);
+  }
+  .note a {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* The notes sit on the orange line, like the stops on the home page. */
+  .notes {
+    --rail: 7px;
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 32px;
+    display: grid;
+    gap: 16px;
+  }
+  .notes::before {
+    content: "";
+    position: absolute;
+    left: var(--rail);
+    top: 22px;
+    bottom: 22px;
+    width: 2px;
+    background: var(--pipeline);
+  }
+  @media (min-width: 1100px) {
+    .notes {
+      padding-top: 48px;
+      gap: 24px;
+    }
+    .notes::before {
+      top: 70px;
+    }
+  }
+  .notes a {
+    position: relative;
+    display: grid;
+    gap: 6px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    text-decoration: none;
+    transition:
+      background 0.3s var(--ease),
+      box-shadow 0.3s var(--ease);
+  }
+  /* The node on the line. */
+  .notes a::before {
+    content: "";
+    position: absolute;
+    left: calc(-32px + var(--rail) - 7px + 1px);
+    top: 20px;
+    width: 16px;
+    height: 16px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 3px solid var(--pipeline);
+    background: var(--paper);
+    transition: background 0.3s var(--ease);
+  }
+  .notes a:hover,
+  .notes a[aria-current] {
+    background: var(--surface);
+    box-shadow: 0 12px 28px -14px rgb(17 19 24 / 0.25);
+  }
+  .notes a:hover::before,
+  .notes a[aria-current]::before {
+    background: var(--pipeline);
+  }
+  /* On wide screens the chosen note plugs into the window. */
+  @media (min-width: 1100px) {
+    .notes a::after {
+      content: "";
+      position: absolute;
+      right: calc(100% + 32px - var(--rail) - 1px);
+      top: 27px;
+      width: 0;
+      height: 2px;
+      background: var(--pipeline);
+      transition: width 0.5s var(--ease);
+    }
+    .notes a[aria-current]::after {
+      width: 64px;
+    }
+  }
+  .notes strong {
+    font: 500 20px/1.2 var(--display);
+    letter-spacing: -0.01em;
+  }
+  .notes span {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-muted);
+  }
+  .notes .jump {
+    font: 500 12px/1 var(--mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--pipeline-ink);
+    margin-top: 4px;
+  }
+  .notes a[aria-current] .jump {
+    color: var(--ink);
+  }
+</style>

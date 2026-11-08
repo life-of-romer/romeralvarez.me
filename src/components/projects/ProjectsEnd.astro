@@ -1,0 +1,43 @@
+---
+import { SITE } from "../../site";
+
+interface Props {
+  title: string;
+  text: string;
+}
+
+const { title, text } = Astro.props;
+---
+
+<section class="end">
+  <h2>{title}</h2>
+  <p>{text}</p>
+  <div class="reach">
+    <a class="pill cta big" href={`mailto:${SITE.email}`} data-umami-event="email" data-umami-event-place="projects">Hablemos</a>
+    <a href={SITE.linkedin} rel="me" data-umami-event="profile" data-umami-event-network="linkedin" data-umami-event-place="projects">LinkedIn</a>
+    <a href={SITE.github} rel="me" data-umami-event="profile" data-umami-event-network="github" data-umami-event-place="projects">GitHub</a>
+  </div>
+</section>
+
+<style>
+  .end {
+    padding-block: 96px 64px;
+  }
+  h2 {
+    margin-bottom: 24px;
+  }
+  p {
+    margin: 0 0 32px;
+    max-width: 46ch;
+    color: var(--ink-muted);
+  }
+  .reach {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 24px;
+  }
+  .reach a:not(.pill) {
+    font-weight: 500;
+  }
+</style>
