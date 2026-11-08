@@ -19,6 +19,7 @@
   --mono: var(--font-mono), ui-monospace, Menlo, monospace;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --indent: clamp(36px, 26vw, 400px);
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
   color-scheme: light;
 }
 
@@ -91,6 +92,9 @@ html {
 }
 
 @media (min-width: 720px) {
+  :root {
+    --gutter: max(48px, env(safe-area-inset-left, 0px));
+  }
   .wrap {
     padding-left: max(48px, env(safe-area-inset-left, 0px));
     padding-right: max(48px, env(safe-area-inset-right, 0px));

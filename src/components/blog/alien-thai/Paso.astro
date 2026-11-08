@@ -1,0 +1,37 @@
+---
+interface Props {
+  titulo: string;
+  /** Which part of the mural this step frames. */
+  foco?: "centro" | "izquierda" | "derecha";
+}
+
+const { titulo, foco = "centro" } = Astro.props;
+---
+
+<div class="paso" data-foco={foco}>
+  <b>{titulo}</b>
+  <div class="body"><slot /></div>
+</div>
+
+<style>
+  .paso {
+    max-width: 34ch;
+    padding: 22px 24px;
+    border-radius: 12px;
+    background: var(--surface);
+    transition: opacity 0.4s;
+  }
+  b {
+    display: block;
+    margin-bottom: 8px;
+    font: 500 24px/1.15 var(--display);
+    letter-spacing: -0.02em;
+  }
+  .body {
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  .body :global(p) {
+    margin: 0;
+  }
+</style>

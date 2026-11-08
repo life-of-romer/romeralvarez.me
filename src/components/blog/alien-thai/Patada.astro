@@ -1,0 +1,87 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import "./alien-thai.css";
+
+interface Props {
+  imagen: ImageMetadata;
+  alt: string;
+}
+
+const { imagen, alt } = Astro.props;
+const FRAMES = 24;
+---
+
+<!--
+  PLACEHOLDER. The goal is a 24-frame sequence of the kick, scrubbed by scroll (Apple style).
+  That sequence does not exist yet, so the slider only tilts the single still we have.
+  Once frames exist: take `frames: ImageMetadata[]`, swap the src per value, and tie it to scroll with GSAP ScrollTrigger.
+-->
+<section class="x at wide patada" aria-label="Patada fotograma a fotograma">
+  <div class="stage"><Image src={imagen} alt={alt} width={640} /></div>
+  <div>
+    <h3 class="at-title">La patada,<br />a tu ritmo<i>.</i></h3>
+    <label class="at-meta" for="patada-range">Arrastra para avanzar</label>
+    <input type="range" id="patada-range" min="0" max={FRAMES - 1} value="0" />
+    <output class="frames" for="patada-range">Fotograma 01 / {FRAMES}</output>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".patada").forEach((root) => {
+    const range = root.querySelector<HTMLInputElement>("input")!;
+    const img = root.querySelector<HTMLImageElement>(".stage img")!;
+    const out = root.querySelector<HTMLOutputElement>(".frames")!;
+    const total = Number(range.max) + 1;
+    const update = () => {
+      const t = Number(range.value) / (total - 1);
+      img.style.transform = `rotate(${-14 + t * 22}deg) translateX(${(t - 0.5) * 8}%)`;
+      out.textContent = `Fotograma ${String(Number(range.value) + 1).padStart(2, "0")} / ${total}`;
+    };
+    range.addEventListener("input", update);
+    update();
+  });
+</script>
+
+<style>
+  .patada {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 24px;
+    padding: clamp(22px, 4vw, 40px);
+    border-radius: 12px;
+  }
+  .stage {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+  .stage img {
+    width: 86%;
+    height: auto;
+    transform-origin: 50% 80%;
+  }
+  .at-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+  label {
+    display: block;
+    margin: 18px 0 8px;
+  }
+  input {
+    width: 100%;
+    accent-color: var(--at-green);
+  }
+  .frames {
+    font: 500 12px/1 var(--mono);
+    color: var(--at-wall-dim);
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 760px) {
+    .patada {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

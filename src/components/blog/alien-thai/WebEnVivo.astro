@@ -1,0 +1,149 @@
+---
+interface Props {
+  url: string;
+  titulo: string;
+}
+
+const { url, titulo } = Astro.props;
+const host = url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+---
+
+<!--
+  The live site inside a device frame. Desktop renders the iframe at 1280px and scales it to fit,
+  so the reader sees the real desktop layout; phone renders it at 375px unscaled.
+-->
+<section class="x wide live" aria-label={titulo}>
+  <div class="tabs" role="group" aria-label="Dispositivo">
+    <button type="button" data-dev="desk" aria-pressed="true">Escritorio</button>
+    <button type="button" data-dev="phone" aria-pressed="false">Móvil</button>
+  </div>
+  <div class="device">
+    <div class="bar"><i></i><i></i><i></i><span>{host}</span></div>
+    <div class="screen">
+      <iframe src={url} title={titulo} loading="lazy"></iframe>
+    </div>
+  </div>
+  <p class="note">Puedes navegarla aquí mismo o <a href={url} target="_blank" rel="noopener">abrirla en una pestaña nueva</a>.</p>
+</section>
+
+<script>
+  const DESK = { w: 1280, h: 800 };
+  document.querySelectorAll<HTMLElement>(".live").forEach((root) => {
+    const device = root.querySelector<HTMLElement>(".device")!;
+    const screen = root.querySelector<HTMLElement>(".screen")!;
+    const frame = root.querySelector<HTMLIFrameElement>("iframe")!;
+    const fit = () => {
+      if (device.classList.contains("phone")) {
+        frame.style.cssText = "";
+        screen.style.height = "";
+        return;
+      }
+      const scale = screen.clientWidth / DESK.w;
+      frame.style.cssText = `width:${DESK.w}px;height:${DESK.h}px;transform:scale(${scale});transform-origin:0 0`;
+      screen.style.height = `${DESK.h * scale}px`;
+    };
+    root.querySelectorAll<HTMLButtonElement>(".tabs button").forEach((b, _, all) =>
+      b.addEventListener("click", () => {
+        all.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+        device.classList.toggle("phone", b.dataset.dev === "phone");
+        fit();
+      }),
+    );
+    new ResizeObserver(fit).observe(screen);
+  });
+</script>
+
+<style>
+  .live {
+    display: grid;
+    justify-items: center;
+    gap: 18px;
+  }
+  .tabs {
+    display: flex;
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+  }
+  .tabs button {
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    color: var(--ink-muted);
+    font: 500 12px/1 var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .tabs button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .device {
+    width: min(100%, 1040px);
+    padding: 10px;
+    border-radius: 14px;
+    background: var(--ink);
+    box-shadow: 0 30px 60px -28px rgb(17 19 24 / 0.45);
+  }
+  .device.phone {
+    width: min(100%, 399px);
+    padding: 12px;
+    border-radius: 36px;
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 6px 10px;
+    font: 500 11px/1 var(--mono);
+  }
+  .bar i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #3a3e46;
+  }
+  .phone .bar i {
+    display: none;
+  }
+  .bar span {
+    flex: 1;
+    overflow: hidden;
+    padding: 6px;
+    border-radius: 6px;
+    background: #22252b;
+    color: #b6bac2;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .screen {
+    overflow: hidden;
+    height: min(62vh, 560px);
+    border-radius: 6px;
+    background: var(--at-tatami);
+  }
+  .phone .screen {
+    height: 680px;
+    border-radius: 24px;
+  }
+  iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .note {
+    margin: 0;
+    max-width: 52ch;
+    font-size: 15px;
+    color: var(--ink-muted);
+    text-align: center;
+  }
+  .note a {
+    color: var(--pipeline-ink);
+  }
+</style>

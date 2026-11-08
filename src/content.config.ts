@@ -2,9 +2,9 @@ import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
-// One folder per language: src/content/blog/<lang>/<slug>.md. The same file name links translations.
+// One folder per language: src/content/blog/<lang>/<slug>.md (or .mdx for posts with components). The same file name links translations.
 const blog = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
   schema: z.object({
     title: z.string(),
     description: z.string(),

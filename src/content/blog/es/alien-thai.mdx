@@ -1,0 +1,95 @@
+---
+title: "Alien Thai: una web para un gimnasio que no es para tipos duros"
+description: "Cómo hicimos la web de Alien Thai, un gimnasio de Muay Thai, jiu-jitsu y capoeira en Tegueste, Tenerife."
+pubDate: 2026-11-08
+tags: ["proyecto", "astro", "diseño"]
+draft: true
+---
+
+import { Portada, Mural, Paso, Capitulo, Paleta, Artes, Arte, Patada, WebEnVivo, Final } from "../../../components/blog/alien-thai";
+import hero from "../../../assets/blog/alien-thai/hero-landscape.avif";
+import mural from "../../../assets/blog/alien-thai/mural.webp";
+import muay from "../../../assets/blog/alien-thai/muay-thai.avif";
+import bjj from "../../../assets/blog/alien-thai/brazilian-jiu-jitsu.avif";
+import capoeira from "../../../assets/blog/alien-thai/capoeira.avif";
+import kick from "../../../assets/blog/alien-thai/kick.avif";
+import mapa from "../../../assets/blog/alien-thai/map-landscape.webp";
+
+{/* BORRADOR: el texto es provisional y sale de lo que ya dice la web de Alien Thai. Reescríbelo con tu voz antes de publicar. */}
+
+Mizzian da clases de Muay Thai en Tegueste, en el norte de Tenerife. Cuando me pidió una web para su gimnasio, la primera frase que me dijo fue la que acabó ordenando todo el proyecto: aquí no hace falta ser un tipo duro.
+
+Esta entrada cuenta cómo la hicimos. Puedes leerla de arriba abajo o saltar al final y entrar directamente en la web.
+
+<Portada
+  imagen={hero}
+  alt="Peleador de Muay Thai lanzando una patada delante del mural de Alien Thai"
+  lugar="Camino Viejo 56 · Tegueste · Tenerife"
+  titulo="Un mundo aparte."
+>
+  Muay Thai, jiu-jitsu brasileño y capoeira bajo el mismo techo.
+</Portada>
+
+## El encargo
+
+Antes de abrir el editor, estuvimos hablando de qué no quería que fuera la web. No quería otro gimnasio de fotos con sudor y gritos.
+
+<Mural imagen={mural} alt="Dos luchadores delante del mural de aliens del gimnasio">
+  <Paso titulo="Un sitio para todos">Da igual quién seas, tu condición o tu nivel. Esa frase tenía que estar en la primera pantalla.</Paso>
+  <Paso titulo="Un mundo propio" foco="izquierda">El mural de la pared, con sus aliens peleando, ya era la identidad del gimnasio. La web solo tenía que llevarlo a la pantalla.</Paso>
+  <Paso titulo="Tres artes" foco="derecha">Muay Thai con Mizzian, jiu-jitsu con Adriano De Oliveira y capoeira con Mestre Sobrancelha.</Paso>
+</Mural>
+
+## La historia de Mizzian
+
+La web tiene una sección que no suele estar en la de un gimnasio: la vida de su fundador. La contamos en cuatro capítulos, cada uno abierto con un numeral tailandés.
+
+<Capitulo n={1} titulo="Las Cruces, Garachico" />
+
+Mizzian creció en el barrio de Las Cruces con dos pasiones: el rap y el Muay Thai. Con 17 años se fue de casa, y vinieron las malas decisiones.
+
+<Capitulo n={2} titulo="El deporte" />
+
+El deporte le sacó de la oscuridad y de los malos hábitos. Le ayudó a controlar la alimentación, el sueño y la ira.
+
+<Capitulo n={3} titulo="Una segunda oportunidad" />
+
+Tegueste, Tejina, Bajamar, La Punta y Valle Guerra fueron el sitio donde pudo enderezar su vida.
+
+<Capitulo n={4} titulo="Alien Thai" />
+
+Un sueño cumplido y una forma de devolverle a la zona lo que le dio.
+
+> No me arrepiento de nada de lo que ha pasado, porque he aprendido de todas esas malas decisiones.
+
+## Pared, tatami y verde
+
+Los colores salen del propio gimnasio: el negro verdoso del tatami, el blanco roto de la pared y el verde de los aliens del mural. Pulsa un color para ver cómo cambia la web.
+
+<Paleta />
+
+<Artes titulo={"Tres artes,\nun mundo."}>
+  <Arte imagen={muay} alt="Mizzian con guantes de Muay Thai" nombre="Muay Thai" detalle="Mizzian · lunes, miércoles y viernes" />
+  <Arte imagen={bjj} alt="Adriano De Oliveira con kimono" nombre="Brazilian Jiu-Jitsu" detalle="Adriano De Oliveira · martes y jueves" />
+  <Arte imagen={capoeira} alt="Mestre Sobrancelha en posición de capoeira" nombre="Capoeira" detalle="Mestre Sobrancelha · Força Luanda" />
+</Artes>
+
+## Los aliens de los precios
+
+En la sección de cuotas, cada tarifa tiene su luchador. La idea es que la patada avance con el scroll, fotograma a fotograma.
+
+<Patada imagen={kick} alt="Alien lanzando una patada" />
+
+## Entra en el gimnasio
+
+La web está hecha con Astro. Las imágenes salen en AVIF y WebP, y no hay nada que instalar para verla: aquí la tienes, navegable dentro del artículo.
+
+<WebEnVivo url="https://romerenr.github.io/alien-thai/" titulo="Web de Alien Thai" />
+
+<Final
+  imagen={mapa}
+  cita="Pueden considerar este sitio su casa."
+  autor="Mizzian, fundador de Alien Thai"
+  web="https://romerenr.github.io/alien-thai/"
+  instagram="@alienthai_"
+/>
