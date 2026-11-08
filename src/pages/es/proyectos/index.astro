@@ -8,7 +8,7 @@ const projects = await getProjects();
 const description = "Proyectos de Romer Alvarez: webs, productos y plataformas que puedes abrir y usar.";
 ---
 
-<Base locale="es" title="Proyectos · Romer Alvarez" description={description} alternates={{ es: "/es/proyectos/" }}>
+<Base locale="es" title="Proyectos · Romer Alvarez" description={description} alternates={{ es: "/es/proyectos/" }} fallbacks={{ en: "/#projects", it: "/it/#projects" }}>
   <main id="main" class="wrap">
     <h1>Proyectos.</h1>
     <p class="lead">Cosas que he llevado de la idea a producción. Ábrelas, navégalas y mira con qué están hechas.</p>

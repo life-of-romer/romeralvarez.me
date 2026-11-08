@@ -31,7 +31,7 @@ const jsonLd = {
 };
 ---
 
-<Base locale="es" title={`${name} · Proyectos · Romer Alvarez`} description={summary.es} alternates={{ es: self }} jsonLd={jsonLd}>
+<Base locale="es" title={`${name} · Proyectos · Romer Alvarez`} description={summary.es} alternates={{ es: self }} fallbacks={{ en: "/#projects", it: "/it/#projects" }} jsonLd={jsonLd}>
   <main id="main" class="wrap">
     <a class="back" href="/es/proyectos/">← Todos los proyectos</a>
     <div class="head">

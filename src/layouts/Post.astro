@@ -1,6 +1,6 @@
 ---
 import Base from "./Base.astro";
-import { t } from "../i18n";
+import { locales, t } from "../i18n";
 import { blogIndexUrl, formatDate, getTranslations, postLocale, postUrl, type Post } from "../lib/blog";
 import { SITE } from "../site";
 
@@ -12,6 +12,8 @@ const { post } = Astro.props;
 const locale = postLocale(post);
 const translations = await getTranslations(post);
 const alternates = Object.fromEntries(Object.entries(translations).map(([l, p]) => [l, postUrl(p!)]));
+// Languages this post isn't translated into switch to that language's blog index.
+const fallbacks = Object.fromEntries(locales.map((l) => [l, blogIndexUrl(l)]));
 const { title, description, pubDate, updatedDate, tags, image } = post.data;
 
 const jsonLd = {
@@ -28,9 +30,9 @@ const jsonLd = {
 };
 ---
 
-<Base locale={locale} title={`${title} · Romer Alvarez`} description={description} image={image} alternates={alternates} jsonLd={jsonLd} type="article">
+<Base locale={locale} title={`${title} · Romer Alvarez`} description={description} image={image} alternates={alternates} fallbacks={fallbacks} jsonLd={jsonLd} type="article">
   <main id="main" class="wrap flowing">
-    <a class="back label" href={blogIndexUrl} hreflang={locale === "es" ? undefined : "es"}>{t(locale, "blog.back")}</a>
+    <a class="back label" href={blogIndexUrl(locale)}>{t(locale, "blog.back")}</a>
     <header>
       <time class="label" datetime={pubDate.toISOString()}>{formatDate(pubDate, locale)}</time>
       <h1>{title}</h1>

@@ -22,9 +22,8 @@ export default defineConfig({
   markdown: {
     shikiConfig: { theme: "github-light", wrap: true },
   },
-  // Old blog URLs (AstroPaper) keep working after the move to /es/blog/.
+  // Old blog post URLs (AstroPaper) keep working after the move to /es/blog/. /blog/ itself is now the English index.
   redirects: {
-    "/blog": "/es/blog/",
     "/blog/comunicacion-entre-sistemas-distribuidos": "/es/blog/comunicacion-entre-sistemas-distribuidos/",
     "/blog/conociendo-keycloak": "/es/blog/conociendo-keycloak/",
     "/blog/despliegue-en-azure-kubernetes-service": "/es/blog/despliegue-de-aplicaciones-en-azure/",

@@ -13,11 +13,13 @@ interface Props {
   image?: string;
   /** The same page in other languages. Only languages listed here get an hreflang link. */
   alternates?: Partial<Record<Locale, string>>;
+  /** Where the language switch leads for languages missing from `alternates` (no hreflang). Default: that language's home. */
+  fallbacks?: Partial<Record<Locale, string>>;
   jsonLd?: object;
   type?: "website" | "article";
 }
 
-const { locale, title = t(locale, "meta.title"), description = t(locale, "meta.description"), image, alternates = {}, jsonLd, type = "website" } = Astro.props;
+const { locale, title = t(locale, "meta.title"), description = t(locale, "meta.description"), image, alternates = {}, fallbacks = {}, jsonLd, type = "website" } = Astro.props;
 const canonical = new URL(Astro.url.pathname, SITE.url);
 const ogLocale = { en: "en_US", it: "it_IT", es: "es_ES" }[locale];
 // Pages without their own image share the localized card from public/og/ (1200x630).
@@ -71,7 +73,7 @@ const ogImage = new URL(image ?? `/og/${locale}.jpg`, SITE.url);
   </head>
   <body>
     <a class="skip" href="#main">{t(locale, "skip")}</a>
-    <Header locale={locale} alternates={alternates} />
+    <Header locale={locale} alternates={{ ...fallbacks, ...alternates }} />
     <slot />
     <Footer locale={locale} />
   </body>
