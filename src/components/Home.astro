@@ -4,7 +4,7 @@ import Icon from "./Icon.astro";
 import { locales, localePath, t, type Locale } from "../i18n";
 import type { IconName } from "../lib/icons";
 import { SITE } from "../site";
-import { formatDate, getPosts, postSlug, postUrl } from "../lib/blog";
+import { formatDate, getPosts, getTranslations, postLocale, postSlug, postUrl } from "../lib/blog";
 import { Image } from "astro:assets";
 import photo from "../assets/romer.png";
 import ProjectRow from "./projects/ProjectRow.astro";
@@ -32,8 +32,8 @@ const path: { n: 1 | 2 | 3 | 4; tags: [string, IconName?][] }[] = [
   { n: 4, tags: [["English"], ["Italiano"], ["Español"]] },
 ];
 
-// The latest articles. They are written in Spanish, whatever the page language.
-const posts = (await getPosts("es")).slice(0, 3);
+// The latest articles, written in Spanish; a post shows in the page language when it has been translated.
+const posts = await Promise.all((await getPosts("es")).slice(0, 3).map(async (post) => (await getTranslations(post))[locale] ?? post));
 
 // Projects lead to their own pages, in Spanish like the blog.
 const projects = (await getProjects()).slice(0, 2);
@@ -149,7 +149,7 @@ const jsonLd = {
           {
             posts.map((post) => (
               <li>
-                <a href={postUrl(post)} hreflang="es" data-umami-event="article" data-umami-event-slug={postSlug(post)}>
+                <a href={postUrl(post)} hreflang={postLocale(post)} data-umami-event="article" data-umami-event-slug={postSlug(post)}>
                   <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate, locale)}</time>
                   <span>{post.data.title}</span>
                 </a>

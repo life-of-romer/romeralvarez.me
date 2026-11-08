@@ -1,17 +1,20 @@
 ---
+import { ui } from "./strings";
 import "./alien-thai.css";
+
+const s = ui(Astro.currentLocale);
 
 // Alien Thai's real tokens. Picking one repaints the mini site's accent.
 const colores = [
-  { nombre: "green", hex: "#abd64d", nota: "Acento principal, el de los aliens" },
-  { nombre: "orange", hex: "#f3821d", nota: "El fuego del mural" },
-  { nombre: "teal", hex: "#5eb6b2", nota: "El alien azul" },
-  { nombre: "wall", hex: "#efebdf", nota: "La pared, color del texto" },
+  { nombre: "green", hex: "#abd64d", nota: s.notes[0] },
+  { nombre: "orange", hex: "#f3821d", nota: s.notes[1] },
+  { nombre: "teal", hex: "#5eb6b2", nota: s.notes[2] },
+  { nombre: "wall", hex: "#efebdf", nota: s.notes[3] },
 ];
 ---
 
-<section class="x wide paleta" aria-label="Paleta de Alien Thai">
-  <div class="list" role="group" aria-label="Color de acento">
+<section class="x wide paleta" aria-label={s.paletteLabel}>
+  <div class="list" role="group" aria-label={s.accentLabel}>
     {
       colores.map((c, i) => (
         <button class="sw" type="button" data-c={c.hex} aria-pressed={i === 0 ? "true" : "false"}>
@@ -33,9 +36,9 @@ const colores = [
     </div>
   </div>
   <div class="types">
-    <div><b class="t-display">Un mundo</b><span>Big Shoulders · titulares</span></div>
-    <div><b class="t-sans">Aquí no hace falta</b><span>Hanken Grotesk · texto</span></div>
-    <div><b class="t-mono">10:00–11:30</b><span>JetBrains Mono · horarios</span></div>
+    <div><b class="t-display">Un mundo</b><span>Big Shoulders · {s.typeUses[0]}</span></div>
+    <div><b class="t-sans">Aquí no hace falta</b><span>Hanken Grotesk · {s.typeUses[1]}</span></div>
+    <div><b class="t-mono">10:00–11:30</b><span>JetBrains Mono · {s.typeUses[2]}</span></div>
   </div>
 </section>
 

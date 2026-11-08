@@ -1,6 +1,8 @@
 ---
+import { ui } from "./strings";
 import "./alien-thai.css";
 import "./proceso.css";
+const s = ui(Astro.currentLocale);
 ---
 
 <!--
@@ -62,9 +64,9 @@ import "./proceso.css";
         <span class="word"><span class="w">Alien Thai</span></span>
       </div>
     </div>
-    <div class="modo" role="group" aria-label="Ver el boceto">
-      <button type="button" data-p="false" aria-pressed="true">Esqueleto</button>
-      <button type="button" data-p="true" aria-pressed="false">Pintada</button>
+    <div class="modo" role="group" aria-label={s.sketchLabel}>
+      <button type="button" data-p="false" aria-pressed="true">{s.skeleton}</button>
+      <button type="button" data-p="true" aria-pressed="false">{s.painted}</button>
     </div>
   </div>
 </section>

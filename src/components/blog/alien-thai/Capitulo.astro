@@ -1,4 +1,5 @@
 ---
+import { ui } from "./strings";
 import { Image } from "astro:assets";
 import "./alien-thai.css";
 import n1 from "../../../assets/blog/alien-thai/numeral-1.avif";
@@ -14,14 +15,15 @@ interface Props {
 const { n, titulo } = Astro.props;
 const numeral = { 1: n1, 2: n2, 3: n3, 4: n4 }[n];
 const thai = ["๑", "๒", "๓", "๔"][n - 1];
-const words = ["uno", "dos", "tres", "cuatro"][n - 1];
+const s = ui(Astro.currentLocale);
+const words = s.chapterWords[n - 1];
 ---
 
 <!-- Chapter opener: the Thai numeral from the gym's site, then the title. Text after it stays Markdown. -->
 <div class="x at capitulo">
-  <Image src={numeral} alt={`Numeral tailandés ${thai}`} width={120} />
+  <Image src={numeral} alt={`${s.numeral} ${thai}`} width={120} />
   <div>
-    <span class="at-meta">Capítulo {words}</span>
+    <span class="at-meta">{s.chapter} {words}</span>
     <h3>{titulo}</h3>
   </div>
 </div>

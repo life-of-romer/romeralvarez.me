@@ -1,0 +1,129 @@
+---
+title: "Alien Thai: design, processo, problemi e sviluppo"
+description: "Come abbiamo fatto il sito di Alien Thai, una palestra di Muay Thai, jiu-jitsu e capoeira a Tegueste, Tenerife."
+pubDate: 2026-11-08
+tags: ["progetto", "astro", "design"]
+draft: false
+---
+
+import { Portada, Mural, Paso, Paleta, Artes, Arte, Proceso, Etapa, Patada, WebEnVivo, Final } from "../../../components/blog/alien-thai";
+import hero from "../../../assets/blog/alien-thai/hero-landscape.avif";
+import mural from "../../../assets/blog/alien-thai/mural.webp";
+import muay from "../../../assets/blog/alien-thai/muay-thai.avif";
+import bjj from "../../../assets/blog/alien-thai/brazilian-jiu-jitsu.avif";
+import capoeira from "../../../assets/blog/alien-thai/capoeira.avif";
+import kick from "../../../assets/blog/alien-thai/kick.avif";
+import mapa from "../../../assets/blog/alien-thai/map-landscape.webp";
+
+Tutto è iniziato con un video di un minuto su Instagram. Mizzian, che insegna Muay Thai a Tegueste, raccontava da dove veniva. L'ho visto e ho pensato: il sito di questa palestra lo faccio io.
+
+Quello che non sapevo era tutto ciò che sarebbe venuto dopo. Una prima versione venuta brutta, un iPhone che non voleva vedere un film e un indirizzo che non compare su nessuna mappa. Andiamo per gradi.
+
+<Portada
+  imagen={hero}
+  alt="Lottatore di Muay Thai che tira un calcio davanti al murale di Alien Thai"
+  lugar="Camino Viejo 56 · Tegueste · Tenerife"
+  titulo="Un mundo aparte."
+>
+  Muay Thai, jiu-jitsu brasiliano e capoeira sotto lo stesso tetto.
+</Portada>
+
+## Un mondo a parte
+
+Nel video parla di Las Cruces, a Garachico, del rap, della Muay Thai, di quando è andato via di casa a 17 anni e delle scelte sbagliate. E nel mezzo dice questo: «Lo sport mi ha sempre aiutato a uscire dall'oscurità». Con questo mi aveva già conquistato.
+
+In un altro video spiega perché si chiama Alien Thai. Voleva un posto dove dimenticare i problemi di questo pianeta, un mondo a parte («un mundo aparte»). Quella frase è finita dritta in copertina. E la sua storia… la sua storia è stata la sezione che mi ha fatto penare di più, ma ci arriviamo dopo.
+
+La cosa bella è che quasi tutto c'era già, in palestra. Bastava metterlo in ordine.
+
+<Mural imagen={mural} alt="Due lottatori davanti al murale di alieni della palestra">
+  <Paso titulo="Un posto per tutti">Non importa chi sei, la tua forma fisica o il tuo livello. Doveva vedersi appena entri.</Paso>
+  <Paso titulo="Un mondo tutto suo" foco="izquierda">Il murale sulla parete, con gli alieni che combattono, era già Alien Thai. Il sito doveva solo portarlo sullo schermo.</Paso>
+  <Paso titulo="Tre arti" foco="derecha">Muay Thai con Mizzian, jiu-jitsu con Adriano De Oliveira e capoeira con Mestre Sobrancelha.</Paso>
+</Mural>
+
+Murale, nome, storia. Avevo tutto… tranne una cosa. E ci ho messo un po' a capire quanto pesava.
+
+## Dalle board alla bozza
+
+La creatività non mi è piovuta dal cielo. È stato più come allenarsi: guardare tanto, provare, buttare quasi tutto e ripetere quello che funzionava.
+
+Mi sono messo a guardare siti di ogni tipo. Di sport da combattimento, di marchi di attrezzatura, di studi di design e perfino di cose che non c'entrano niente con il fare a botte. Li ho raggruppati per sezioni, vari modi di fare la stessa cosa uno accanto all'altro.
+
+Ogni board mi aiutava a pensare a una cosa precisa, come mostro i prezzi, come racconto una storia, e da lì nasceva la mia versione, a volte mescolando due idee. Tutto prima in grigio, pezzo per pezzo. Il colore, alla fine.
+
+<Proceso>
+  <Etapa seccion="nav" titulo="Un menu che non ingombra">
+    Qui comanda l'immagine. Menu nascosto, logo al centro e un solo pulsante: la lezione di prova.
+  </Etapa>
+  <Etapa seccion="hero" titulo="La prima schermata">
+    Ho tenuto due idee insieme: un grande disco dietro il lottatore, che poi è diventato il sole del murale, e quello che funziona sempre, foto, titolo e due pulsanti.
+  </Etapa>
+  <Etapa seccion="clases" titulo="Tre arti, tre foto">
+    Icone, schede con testo o foto di gente che si allena. Hanno vinto le foto, senza dubbio.
+  </Etapa>
+  <Etapa seccion="precios" titulo="Prezzi che si leggono al volo">
+    Numeri grandi, un piano in evidenza e basta. Che non ci sia da pensare.
+  </Etapa>
+  <Etapa seccion="historia" titulo="Raccontare da dove viene">
+    Niente linea del tempo. Capitoli, e alla fine la sua frase a schermo intero, che parli lui.
+  </Etapa>
+  <Etapa seccion="cierre" titulo="Un finale con un nome">
+    La mappa per arrivarci e sotto il nome, enorme, da un lato all'altro.
+  </Etapa>
+  <Etapa seccion="pintar" titulo="E poi, il colore">
+    Con tutto al suo posto, era ora di dipingere. E i colori erano già in palestra: il tatami, la parete e il verde degli alieni. Premi il pulsante e lo vedi in grigio o dipinto.
+  </Etapa>
+</Proceso>
+
+## La prima versione
+
+In grigio tutto tornava. Poi ho fatto la prima versione vera, con un disco rosso e un pulsante per provare rosso o verde. Ed è venuta brutta, inutile mentire.
+
+<WebEnVivo url="/blog/alien-thai/v1/index.html" titulo="Prima versione del sito di Alien Thai" barra="alien-thai · v1" />
+
+Eccola, apri il menu e prova i colori. Ha vinto il verde, ma neanche così. Non sembrava la palestra. E lì ho capito: non avevo immagini mie. Avevo video sparsi di Instagram, ognuno diverso dall'altro.
+
+Allora la domanda è cambiata. Non era più quale foto metto, era come deve apparire Alien Thai. I maestri in bianco e nero, con sfondo da studio. Gli alieni del murale che escono dalla parete, in 3D, per i prezzi. Perfino i numeri della storia con la stessa texture degli alieni, perché niente sembrasse preso da un altro sito.
+
+<Artes titulo={"Tre arti,\nun mondo."}>
+  <Arte imagen={muay} alt="Mizzian con i guantoni da Muay Thai" nombre="Muay Thai" detalle="Mizzian · lunedì, mercoledì e venerdì" />
+  <Arte imagen={bjj} alt="Adriano De Oliveira con il kimono" nombre="Brazilian Jiu-Jitsu" detalle="Adriano De Oliveira · martedì e giovedì" />
+  <Arte imagen={capoeira} alt="Mestre Sobrancelha in posizione di capoeira" nombre="Capoeira" detalle="Mestre Sobrancelha · Força Luanda" />
+</Artes>
+
+## Parete, tatami e verde
+
+Chiarito questo, il colore è venuto da solo. Non c'era niente da inventare, bastava guardare: il nero verdastro del tatami, il bianco sporco della parete e il verde degli alieni. Tocca un colore e guarda come cambia il sito.
+
+<Paleta />
+
+## Scegli il tuo round
+
+I prezzi potevano essere una tabella e via. Ma no. Tre schede, numeri grandi, il piano migliore in verde e in ognuna un alieno che si muove.
+
+<Patada imagen={kick} alt="Alieno che tira un calcio" />
+
+## Uscire dall'oscurità
+
+E arriviamo alla sezione da cui è partito tutto. La storia di Mizzian in quattro capitoli, con un film che avanza mentre scorri: Garachico, il suo volto, il sacco davanti al murale e l'altro lato della palestra.
+
+Sul computer, perfetta. Sull'iPhone, ferma sul primo fotogramma. Proprio nella parte a cui tenevo di più. Alla fine era una riga di codice, una sola. Trovarla è stata un'altra storia.
+
+> Non mi pento di niente di quello che è successo, perché ho imparato da tutte quelle scelte sbagliate.
+
+## Camino Viejo 56
+
+Restava solo la parte facile, mettere la palestra sulla mappa. E invece no. Il 56 non compare su nessuna mappa, e quella che avevo in testa, scura come il sito, non esisteva. Così l'ho fatta io. È quella che vedi alla fine.
+
+Più di venti versioni dopo quella prima brutta, eccolo qui. Entra e fatti un giro.
+
+<WebEnVivo url="https://romerenr.github.io/alien-thai/" titulo="Sito di Alien Thai" />
+
+<Final
+  imagen={mapa}
+  cita="Potete considerare questo posto casa vostra."
+  autor="Mizzian, fondatore di Alien Thai"
+  web="https://romerenr.github.io/alien-thai/"
+  instagram="@alienthai_"
+/>

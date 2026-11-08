@@ -1,4 +1,5 @@
 ---
+import { ui } from "./strings";
 import "./proceso.css";
 
 type Seccion = "nav" | "hero" | "clases" | "precios" | "historia" | "cierre" | "pintar";
@@ -48,10 +49,11 @@ const opciones: Partial<Record<Seccion, Op[]>> = {
 };
 const ops = opciones[seccion];
 const letras = ["A", "B", "C", "D"];
+const s = ui(Astro.currentLocale);
 ---
 
 <div class="etapa" data-seccion={seccion} data-estado="antes">
-  <p class="eyebrow">{ops ? `${ops.length} opciones` : "Último paso"}</p>
+  <p class="eyebrow">{ops ? `${ops.length} ${s.options}` : s.lastStep}</p>
   <b class="tit">{titulo}</b>
   <div class="body"><slot /></div>
   {
@@ -62,7 +64,7 @@ const letras = ["A", "B", "C", "D"];
             <div class="th" set:html={o.html} />
             <figcaption>
               {letras[i]}
-              {o.si && <em>a la web</em>}
+              {o.si && <em>{s.madeIt}</em>}
             </figcaption>
           </figure>
         ))}

@@ -1,4 +1,5 @@
 ---
+import { ui } from "./strings";
 import "./alien-thai.css";
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 const { titulo } = Astro.props;
 const lines = titulo.split("\n");
 const lastLine = lines.pop() ?? "";
+const s = ui(Astro.currentLocale);
 ---
 
 <!-- Full-bleed carousel with CSS scroll-snap. The arrows only nudge it; it works without script. -->
@@ -18,10 +20,10 @@ const lastLine = lines.pop() ?? "";
       {lines.map((l) => <>{l}<br /></>)}{lastLine.slice(0, -1)}<i>{lastLine.slice(-1)}</i>
     </h2>
     <div class="arrows">
-      <button class="round" type="button" data-dir="-1" aria-label="Anterior">
+      <button class="round" type="button" data-dir="-1" aria-label={s.prev}>
         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       </button>
-      <button class="round" type="button" data-dir="1" aria-label="Siguiente">
+      <button class="round" type="button" data-dir="1" aria-label={s.next}>
         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       </button>
     </div>

@@ -1,4 +1,5 @@
 ---
+import { ui } from "./strings";
 import { getImage } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import "./alien-thai.css";
@@ -13,21 +14,22 @@ interface Props {
 
 const { imagen, cita, autor, web, instagram } = Astro.props;
 const bg = await getImage({ src: imagen, width: 1920, format: "webp" });
+const s = ui(Astro.currentLocale);
 ---
 
 <!--
   One background layer that drifts slower than the page. The fuller idea (EXPLORATION):
   split the illustration into layers (map, wall, blue alien) moving at different speeds.
 -->
-<section class="x at bleed final" aria-label="Cierre">
+<section class="x at bleed final" aria-label={s.closing}>
   <div class="layer" style={`background-image:url(${bg.src})`}></div>
   <div class="shade"></div>
   <div class="in">
-    <span class="at-meta">Dónde estamos</span>
+    <span class="at-meta">{s.whereWeAre}</span>
     <blockquote>{cita}</blockquote>
     <span class="who">{autor}</span>
     <div class="ctas">
-      <a class="at-pill green" href={web} target="_blank" rel="noopener">Ver la web</a>
+      <a class="at-pill green" href={web} target="_blank" rel="noopener">{s.seeSite}</a>
       <a class="at-pill ghost" href={`https://www.instagram.com/${instagram.replace("@", "")}/`} target="_blank" rel="noopener">{instagram}</a>
     </div>
   </div>
