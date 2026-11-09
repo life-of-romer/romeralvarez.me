@@ -8,7 +8,7 @@ image: /assets/keycloak/keycloak-logo.png
 
 # Conociendo Keycloak - Revisando, refactorizando y actualizando la implementación.
 
-¡Hola de nuevo! Si recuerdan, en mi [anterior post](https://romeralvarez.me/blog/conociendo-keycloak/) nos metimos de lleno con Keycloak en Spring Boot. Sí, lo sé, la implementación fue un poco rápida y, admito, me salté los test unitarios. 😅 Pero, ¿quién no ha hecho eso alguna vez, cierto?
+¡Hola de nuevo! Si recuerdan, en mi [anterior post](/es/blog/conociendo-keycloak/) nos metimos de lleno con Keycloak en Spring Boot. Sí, lo sé, la implementación fue un poco rápida y, admito, me salté los test unitarios. 😅 Pero, ¿quién no ha hecho eso alguna vez, cierto?
 
 Por lo tanto, en este post vamos a revisar y refactorizar el código para intentar seguir las buenas prácticas de programación y actualizar la implementación de nuestra pequeña app de Keycloak.
 

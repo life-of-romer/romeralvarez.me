@@ -52,5 +52,5 @@ e.printStackTrace();
 ```  
 
 
-En el siguiente artículo hablaremos más en profundidad de el tipo de excepciones que existe [excepciones chequeadas y no chequeadas](https://romeralvarez.me/blog/excepciones-chequeadas-y-no-chequeadas---java).
+En el siguiente artículo hablaremos más en profundidad de el tipo de excepciones que existe [excepciones chequeadas y no chequeadas](/es/blog/excepciones-chequeadas-y-no-chequeadas-java/).
 

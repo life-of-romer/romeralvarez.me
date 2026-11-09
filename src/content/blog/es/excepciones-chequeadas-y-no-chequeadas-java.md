@@ -6,7 +6,7 @@ tags: ["java", "manejo de excepciones"]
 ---
 
 # Excepciones chequeadas y no chequeadas  
-Como hablamos en el [anterior post](https://romeralvarez.me/blog/introduccion-al-manejo-de-excepciones/) acerca del manejo de excepciones las excepciones son eventos anormales que ocurren durante la ejecución de un programa y pueden alterar su flujo normal. Java proporciona un mecanismo de manejo de excepciones para capturar y manejar estas situaciones.  
+Como hablamos en el [anterior post](/es/blog/manejo-de-excepciones/) acerca del manejo de excepciones las excepciones son eventos anormales que ocurren durante la ejecución de un programa y pueden alterar su flujo normal. Java proporciona un mecanismo de manejo de excepciones para capturar y manejar estas situaciones.  
 
 Y dentro de estos mecanismos, Java nos ofrece dos tipo de excepciones, unas son capturadas en tiempo de compilación y otras son capturadas en tiempo de ejecución donde todo parte de la clase `Exception`.
 

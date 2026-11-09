@@ -22,16 +22,14 @@ export default defineConfig({
   markdown: {
     shikiConfig: { theme: "github-light", wrap: true },
   },
-  // Old blog post URLs (AstroPaper) keep working after the move to /es/blog/. /blog/ itself is now the English index.
+  // Old blog post URLs (AstroPaper) keep working after the move to /es/blog/. /blog/ is now the English blog, so
+  // posts whose slug didn't change (e.g. /blog/conociendo-keycloak/) now open their English translation.
   redirects: {
-    "/blog/comunicacion-entre-sistemas-distribuidos": "/es/blog/comunicacion-entre-sistemas-distribuidos/",
-    "/blog/conociendo-keycloak": "/es/blog/conociendo-keycloak/",
     "/blog/despliegue-en-azure-kubernetes-service": "/es/blog/despliegue-de-aplicaciones-en-azure/",
     "/blog/el-camino-a-mi-primer-empleo-en-el-sector-tech": "/es/blog/el-camino-a-tech/",
     "/blog/excepciones-chequeadas-y-no-chequeadas---java": "/es/blog/excepciones-chequeadas-y-no-chequeadas-java/",
     "/blog/introducción-a-hilos-y-concurrencia": "/es/blog/hilos-y-concurrencia/",
     "/blog/introduccion-al-manejo-de-excepciones": "/es/blog/manejo-de-excepciones/",
-    "/blog/monitorizacion-de-sistemas-distribuidos": "/es/blog/monitorizacion-de-sistemas-distribuidos/",
     "/blog/primera-entrada-al-blog": "/es/blog/presentacion/",
     "/blog/revisando-refactorizando-y-actualizando-la-implementacion-keycloak": "/es/blog/refactorizando-keycloak/",
   },
