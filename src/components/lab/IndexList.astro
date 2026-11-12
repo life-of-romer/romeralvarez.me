@@ -1,0 +1,75 @@
+---
+import Visual from "./Visual.astro";
+import { kinds, type Piece } from "./pieces";
+
+interface Props {
+  pieces: Piece[];
+}
+
+const { pieces } = Astro.props;
+---
+
+<!-- Every piece as a row with its window or diagram under it. The phone view of the gallery. -->
+<ol class="rows">
+  {
+    pieces.map((piece) => (
+      <li data-kind={piece.kind}>
+        <a href={piece.href}>
+          <span class="label year">{piece.year}</span>
+          <span class="main">
+            <span class="g-name">{piece.name}</span>
+            <span class="sub">
+              {piece.org} · {piece.role}
+            </span>
+          </span>
+          <span class="label kind">{kinds[piece.kind]}</span>
+        </a>
+        <a class="shot" href={piece.href} tabindex="-1" aria-hidden="true">
+          <Visual piece={piece} sizes="100vw" />
+        </a>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .rows {
+    list-style: none;
+    margin: 40px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  .rows li {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 32px;
+  }
+  .rows a:not(.shot) {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 12px;
+    padding: 26px 0;
+    text-decoration: none;
+  }
+  .main {
+    display: grid;
+    gap: 8px;
+  }
+  .g-name {
+    font-size: 24px;
+    line-height: 1.1;
+  }
+  .sub {
+    color: var(--ink-muted);
+    font-size: 15px;
+  }
+  .kind {
+    padding: 7px 9px;
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .shot {
+    display: block;
+  }
+</style>

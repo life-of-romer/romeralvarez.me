@@ -1,8 +1,9 @@
 ---
-// Variant A: one piece large, the rest on a carousel.
+// Variant A: one piece large, the rest on a carousel. On phones, a plain index of every piece.
 import Base from "../../layouts/Base.astro";
 import ProjectsEnd from "../../components/projects/ProjectsEnd.astro";
 import Filter from "../../components/lab/Filter.astro";
+import IndexList from "../../components/lab/IndexList.astro";
 import Carousel from "../../components/lab/Carousel.astro";
 import Visual from "../../components/lab/Visual.astro";
 import { getPieces, kinds } from "../../components/lab/pieces";
@@ -19,8 +20,9 @@ const [lead, ...rest] = await getPieces();
     <h1>{t(locale, "projects.page.title")}</h1>
     <p class="g-lead">{t(locale, "projects.page.lead")}</p>
     <Filter pieces={[lead, ...rest]} />
+    <div class="phone"><IndexList pieces={[lead, ...rest]} /></div>
 
-    <article class="lead" data-kind={lead.kind}>
+    <article class="lead wide" data-kind={lead.kind}>
       <a class="shot" href={lead.href} tabindex="-1" aria-hidden="true"><Visual piece={lead} /></a>
       <div class="body">
         <p class="label g-meta"><span>{kinds[lead.kind]}</span><span>{lead.org}</span><span>{lead.year}</span></p>
@@ -37,7 +39,7 @@ const [lead, ...rest] = await getPieces();
     </article>
 
   </div>
-    <Carousel pieces={rest} title="Más trabajo." />
+    <div class="wide"><Carousel pieces={rest} title="Más trabajo." /></div>
     <div class="wrap">
     <ProjectsEnd locale={locale} title={t(locale, "projects.page.endTitle")} text={t(locale, "projects.page.endText")} />
   </div>
@@ -45,6 +47,17 @@ const [lead, ...rest] = await getPieces();
 </Base>
 
 <style>
+  /* Phones get the index; the featured piece and the carousel start at tablet width. */
+  @media (max-width: 719.98px) {
+    .wide {
+      display: none !important;
+    }
+  }
+  @media (min-width: 720px) {
+    .phone {
+      display: none;
+    }
+  }
   .shot {
     display: block;
     transition: transform 0.5s var(--ease);
