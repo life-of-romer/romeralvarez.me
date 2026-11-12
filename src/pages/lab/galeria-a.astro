@@ -1,8 +1,9 @@
 ---
-// Variant A: one piece large, the rest in a compact grid.
+// Variant A: one piece large, the rest on a carousel.
 import Base from "../../layouts/Base.astro";
 import ProjectsEnd from "../../components/projects/ProjectsEnd.astro";
 import Filter from "../../components/lab/Filter.astro";
+import Carousel from "../../components/lab/Carousel.astro";
 import Visual from "../../components/lab/Visual.astro";
 import { getPieces, kinds } from "../../components/lab/pieces";
 import { t } from "../../i18n";
@@ -13,7 +14,8 @@ const [lead, ...rest] = await getPieces();
 ---
 
 <Base locale={locale} title="Galería A · Romer Alvarez">
-  <main id="main" class="wrap g-main">
+  <main id="main" class="g-main">
+  <div class="wrap">
     <h1>{t(locale, "projects.page.title")}</h1>
     <p class="g-lead">{t(locale, "projects.page.lead")}</p>
     <Filter pieces={[lead, ...rest]} />
@@ -34,32 +36,11 @@ const [lead, ...rest] = await getPieces();
       </div>
     </article>
 
-    <ul class="grid">
-      {
-        rest.map((piece) => (
-          <li data-kind={piece.kind}>
-            <a class="shot" href={piece.href} tabindex="-1" aria-hidden="true">
-              <Visual piece={piece} sizes="(min-width: 1100px) 420px, 100vw" />
-            </a>
-            <p class="label g-meta">
-              <span>{kinds[piece.kind]}</span>
-              <span>{piece.org}</span>
-              <span>{piece.year}</span>
-            </p>
-            <h2 class="g-name">
-              <a href={piece.href}>{piece.name}</a>
-            </h2>
-            <p class="role">{piece.role}</p>
-            <ul class="g-tags">
-              {piece.stack.map((s) => (
-                <li>{s}</li>
-              ))}
-            </ul>
-          </li>
-        ))
-      }
-    </ul>
+  </div>
+    <Carousel pieces={rest} title="Más trabajo." />
+    <div class="wrap">
     <ProjectsEnd locale={locale} title={t(locale, "projects.page.endTitle")} text={t(locale, "projects.page.endText")} />
+  </div>
   </main>
 </Base>
 
@@ -97,39 +78,11 @@ const [lead, ...rest] = await getPieces();
   .lead p:last-child {
     margin: 0;
   }
-  .grid {
-    list-style: none;
-    margin: 96px 0 0;
-    padding: 0;
-    display: grid;
-    gap: 64px 40px;
-  }
-  .grid .g-meta {
-    margin-top: 24px;
-  }
-  .grid .g-name {
-    margin: 10px 0 6px;
-    font-size: clamp(22px, 2vw, 26px);
-    line-height: 1.15;
-  }
-  .role {
-    margin: 0 0 16px;
-    color: var(--ink-muted);
-    font-size: 15px;
-  }
-  @media (min-width: 720px) {
-    .grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
   @media (min-width: 1100px) {
     .lead {
       grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
       gap: 48px;
       align-items: center;
-    }
-    .grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 </style>
