@@ -43,4 +43,20 @@ const projects = defineCollection({
     }),
 });
 
-export const collections = { blog, projects };
+// Company work with no site to open, explained with a diagram: src/content/systems/<slug>.yaml. A chain node is plain text unless it needs translating.
+const systems = defineCollection({
+  loader: glob({ pattern: "*.yaml", base: "./src/content/systems" }),
+  schema: z.object({
+    order: z.number(),
+    year: z.number(),
+    org: z.string(),
+    name: localized,
+    role: localized,
+    summary: localized,
+    stack: z.array(z.string()),
+    chain: z.array(z.union([z.string(), localized])),
+    base: z.string(),
+  }),
+});
+
+export const collections = { blog, projects, systems };

@@ -79,5 +79,17 @@
   "blog.back": "← All posts",
   "notFound.title": "Page not found",
   "notFound.text": "This page doesn't exist or has moved.",
-  "notFound.home": "Back home"
+  "notFound.home": "Back home",
+  "gallery.filter.label": "Filter by type",
+  "gallery.filter.all": "All",
+  "gallery.filter.system": "Systems",
+  "gallery.filter.web": "Websites",
+  "gallery.kind.system": "System",
+  "gallery.kind.web": "Website",
+  "gallery.more": "More work.",
+  "gallery.carousel": "carousel",
+  "gallery.prev": "Previous project",
+  "gallery.next": "Next project",
+  "gallery.pause": "Pause the carousel",
+  "gallery.play": "Play the carousel"
 }

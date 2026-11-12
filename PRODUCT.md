@@ -29,10 +29,11 @@ A backend and cloud-platform engineer (Kubernetes on AWS, Terraform, observabili
 
 ## Capabilities and Constraints
 
-- Projects section: a short block on the home page that leads to a dedicated `/projects` page with one page per project.
-- Each project should show technologies, features, Romer's role, and link to the live result where one exists.
-- Only one project exists so far: Alien Thai. The format must look complete with one project and scale to a handful.
-- Open: whether project pages are translated or Spanish-only like the blog.
+- Projects section: a short block on the home page that leads to a dedicated `/projects` page.
+- The projects page is a gallery of two kinds of piece, in English, Spanish and Italian: websites that open (one page per project) and systems explained with a diagram (collection `systems`). A type filter switches between them.
+- System pieces have no detail page yet, so they don't link anywhere.
+- Each piece should show technologies, Romer's role, and link to the live result where one exists.
+- The gallery has four pieces so far and the carousel is designed for more.
 
 ## Brand Commitments
 

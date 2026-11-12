@@ -1,48 +1,54 @@
 ---
-import Visual from "./Visual.astro";
-import { kinds, type Piece } from "./pieces";
+import PieceVisual from "./PieceVisual.astro";
+import { t, type Locale } from "../../i18n";
+import type { Piece } from "../../lib/gallery";
 
 interface Props {
   pieces: Piece[];
   title: string;
+  locale: Locale;
 }
 
-const { pieces, title } = Astro.props;
+const { pieces, title, locale } = Astro.props;
 const two = (n: number) => String(n).padStart(2, "0");
 ---
 
 <!-- The rest of the work on one line: the piece in the middle faces you, its neighbours lean away. Scrolls natively (wheel, swipe, keys). -->
-<section class="more" aria-roledescription="carrusel" aria-labelledby="more-title" data-carousel>
+<section class="more" aria-roledescription={t(locale, "gallery.carousel")} aria-labelledby="more-title" data-carousel>
   <div class="wrap head">
     <h2 id="more-title">{title}</h2>
     <div class="ctl">
       <p class="label count" aria-live="off"><b data-now>01</b> / <span data-total>{two(pieces.length)}</span></p>
-      <button type="button" data-prev aria-label="Proyecto anterior">
+      <button type="button" data-prev aria-label={t(locale, "gallery.prev")}>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"></path></svg>
       </button>
-      <button type="button" data-next aria-label="Proyecto siguiente">
+      <button type="button" data-next aria-label={t(locale, "gallery.next")}>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"></path></svg>
       </button>
-      <button type="button" class="toggle" data-toggle aria-label="Pausar el carrusel" data-pause="Pausar el carrusel" data-play="Reproducir el carrusel">
+      <button type="button" class="toggle" data-toggle aria-label={t(locale, "gallery.pause")} data-pause={t(locale, "gallery.pause")} data-play={t(locale, "gallery.play")}>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-pause" d="M8 6v12M16 6v12"></path><path class="i-play" d="M9 6l9 6-9 6z"></path></svg>
       </button>
     </div>
   </div>
   <ul class="track" tabindex="0" aria-label={title}>
     {
-      pieces.map((piece) => (
+      pieces.map((piece) => {
+        // A system has no page yet: plain elements, but a leaning slide still comes to the middle on click.
+        const Shot = piece.href ? "a" : "div";
+        const Name = piece.href ? "a" : "span";
+        return (
         <li class="slide" data-kind={piece.kind}>
-          <a class="shot" href={piece.href} tabindex="-1" aria-hidden="true">
-            <Visual piece={piece} sizes="(min-width: 900px) 760px, 84vw" />
-          </a>
+          <Shot class="shot" href={piece.href} tabindex={piece.href ? "-1" : undefined} aria-hidden="true">
+            <PieceVisual piece={piece} sizes="(min-width: 900px) 760px, 84vw" />
+          </Shot>
           <div class="cap">
             <p class="label g-meta">
-              <span>{kinds[piece.kind]}</span>
+              <span>{t(locale, `gallery.kind.${piece.kind}`)}</span>
               <span>{piece.org}</span>
               <span>{piece.year}</span>
             </p>
             <h3 class="g-name">
-              <a href={piece.href}>{piece.name}</a>
+              <Name href={piece.href}>{piece.name}</Name>
             </h3>
             <p class="role">{piece.role}</p>
             <ul class="g-tags">
@@ -52,7 +58,8 @@ const two = (n: number) => String(n).padStart(2, "0");
             </ul>
           </div>
         </li>
-      ))
+        );
+      })
     }
   </ul>
 </section>

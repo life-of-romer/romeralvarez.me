@@ -1,21 +1,23 @@
 ---
-import type { Piece } from "./pieces";
+import { t, type Locale } from "../../i18n";
+import type { Piece } from "../../lib/gallery";
 
 interface Props {
   pieces: Piece[];
+  locale: Locale;
 }
 
-const { pieces } = Astro.props;
+const { pieces, locale } = Astro.props;
 const count = (kind?: string) => pieces.filter((p) => !kind || p.kind === kind).length;
 const options = [
-  { value: "all", label: "Todo", n: count() },
-  { value: "system", label: "Sistemas", n: count("system") },
-  { value: "web", label: "Webs", n: count("web") },
+  { value: "all", label: t(locale, "gallery.filter.all"), n: count() },
+  { value: "system", label: t(locale, "gallery.filter.system"), n: count("system") },
+  { value: "web", label: t(locale, "gallery.filter.web"), n: count("web") },
 ];
 ---
 
 <!-- Filters every [data-kind] element on the page. -->
-<div class="filter" role="group" aria-label="Filtrar por tipo">
+<div class="filter" role="group" aria-label={t(locale, "gallery.filter.label")}>
   {
     options.map(({ value, label, n }, i) => (
       <button type="button" data-filter={value} aria-pressed={i === 0 ? "true" : "false"}>

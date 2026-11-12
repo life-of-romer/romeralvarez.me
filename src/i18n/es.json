@@ -79,5 +79,17 @@
   "blog.back": "← Todos los artículos",
   "notFound.title": "Página no encontrada",
   "notFound.text": "Esta página no existe o ha cambiado de sitio.",
-  "notFound.home": "Volver al inicio"
+  "notFound.home": "Volver al inicio",
+  "gallery.filter.label": "Filtrar por tipo",
+  "gallery.filter.all": "Todo",
+  "gallery.filter.system": "Sistemas",
+  "gallery.filter.web": "Webs",
+  "gallery.kind.system": "Sistema",
+  "gallery.kind.web": "Web",
+  "gallery.more": "Más trabajo.",
+  "gallery.carousel": "carrusel",
+  "gallery.prev": "Proyecto anterior",
+  "gallery.next": "Proyecto siguiente",
+  "gallery.pause": "Pausar el carrusel",
+  "gallery.play": "Reproducir el carrusel"
 }

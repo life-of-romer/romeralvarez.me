@@ -1,20 +1,25 @@
 ---
-import Visual from "./Visual.astro";
-import { kinds, type Piece } from "./pieces";
+import PieceVisual from "./PieceVisual.astro";
+import { t, type Locale } from "../../i18n";
+import type { Piece } from "../../lib/gallery";
 
 interface Props {
   pieces: Piece[];
+  locale: Locale;
 }
 
-const { pieces } = Astro.props;
+const { pieces, locale } = Astro.props;
 ---
 
 <!-- Every piece as a row with its window or diagram under it. The phone view of the gallery. -->
 <ol class="rows">
   {
-    pieces.map((piece) => (
+    pieces.map((piece) => {
+      // A system has no page to open yet, so its row and visual are plain elements.
+      const Tag = piece.href ? "a" : "div";
+      return (
       <li data-kind={piece.kind}>
-        <a href={piece.href}>
+        <Tag class="row" href={piece.href}>
           <span class="label year">{piece.year}</span>
           <span class="main">
             <span class="g-name">{piece.name}</span>
@@ -22,13 +27,14 @@ const { pieces } = Astro.props;
               {piece.org} · {piece.role}
             </span>
           </span>
-          <span class="label kind">{kinds[piece.kind]}</span>
-        </a>
-        <a class="shot" href={piece.href} tabindex="-1" aria-hidden="true">
-          <Visual piece={piece} sizes="100vw" />
-        </a>
+          <span class="label kind">{t(locale, `gallery.kind.${piece.kind}`)}</span>
+        </Tag>
+        <Tag class="shot" href={piece.href} tabindex={piece.href ? "-1" : undefined} aria-hidden="true">
+          <PieceVisual piece={piece} sizes="100vw" />
+        </Tag>
       </li>
-    ))
+      );
+    })
   }
 </ol>
 
@@ -43,7 +49,7 @@ const { pieces } = Astro.props;
     border-bottom: 1px solid var(--line);
     padding-bottom: 32px;
   }
-  .rows a:not(.shot) {
+  .row {
     display: grid;
     grid-template-columns: 44px minmax(0, 1fr) auto;
     align-items: baseline;

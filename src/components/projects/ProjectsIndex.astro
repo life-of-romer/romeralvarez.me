@@ -1,52 +1,109 @@
 ---
 import Base from "../../layouts/Base.astro";
-import ProjectRow from "./ProjectRow.astro";
+import GalleryFilter from "./GalleryFilter.astro";
+import GalleryIndex from "./GalleryIndex.astro";
+import GalleryCarousel from "./GalleryCarousel.astro";
+import PieceVisual from "./PieceVisual.astro";
 import ProjectsEnd from "./ProjectsEnd.astro";
 import { locales, t, type Locale } from "../../i18n";
-import { getProjects, projectsIndexUrl } from "../../lib/projects";
+import { projectsIndexUrl } from "../../lib/projects";
+import { getPieces } from "../../lib/gallery";
+import "./gallery.css";
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
-const projects = await getProjects();
+const [lead, ...rest] = await getPieces(locale);
+// Without a link the visual and the name are plain elements.
+const Shot = lead.href ? "a" : "div";
+const Name = lead.href ? "a" : "span";
 const alternates = Object.fromEntries(locales.map((l) => [l, projectsIndexUrl(l)]));
 ---
 
 <Base locale={locale} title={`${t(locale, "nav.projects")} · Romer Alvarez`} description={t(locale, "projects.page.description")} alternates={alternates}>
-  <main id="main" class="wrap">
-    <h1>{t(locale, "projects.page.title")}</h1>
-    <p class="lead">{t(locale, "projects.page.lead")}</p>
-    <ol class="list">
-      {
-        projects.map((project) => (
-          <li>
-            <ProjectRow project={project} locale={locale} level={2} />
-          </li>
-        ))
-      }
-    </ol>
-    <ProjectsEnd locale={locale} title={t(locale, "projects.page.endTitle")} text={t(locale, "projects.page.endText")} />
+  <main id="main" class="g-main">
+    <div class="wrap">
+      <h1>{t(locale, "projects.page.title")}</h1>
+      <p class="g-lead">{t(locale, "projects.page.lead")}</p>
+      <GalleryFilter pieces={[lead, ...rest]} locale={locale} />
+      <div class="phone"><GalleryIndex pieces={[lead, ...rest]} locale={locale} /></div>
+
+      <article class="lead wide" data-kind={lead.kind}>
+        <Shot class="shot" href={lead.href} tabindex={lead.href ? "-1" : undefined} aria-hidden="true"><PieceVisual piece={lead} /></Shot>
+        <div class="body">
+          <p class="label g-meta"><span>{t(locale, `gallery.kind.${lead.kind}`)}</span><span>{lead.org}</span><span>{lead.year}</span></p>
+          <h2 class="g-name"><Name href={lead.href}>{lead.name}</Name></h2>
+          <p class="g-summary">{lead.summary}</p>
+          <dl>
+            <dt class="label">{t(locale, "projects.role")}</dt>
+            <dd>{lead.role}</dd>
+            <dt class="label">Stack</dt>
+            <dd><ul class="g-tags">{lead.stack.map((s) => <li>{s}</li>)}</ul></dd>
+          </dl>
+          {lead.href && <p><a class="pill dark" href={lead.href}>{t(locale, "projects.view")}</a></p>}
+        </div>
+      </article>
+    </div>
+    <div class="wide"><GalleryCarousel pieces={rest} title={t(locale, "gallery.more")} locale={locale} /></div>
+    <div class="wrap">
+      <ProjectsEnd locale={locale} title={t(locale, "projects.page.endTitle")} text={t(locale, "projects.page.endText")} />
+    </div>
   </main>
 </Base>
 
 <style>
-  main {
-    padding-block: 72px 0;
+  /* Phones get the index; the featured piece and the carousel start at tablet width. */
+  @media (max-width: 719.98px) {
+    .wide {
+      display: none !important;
+    }
+  }
+  @media (min-width: 720px) {
+    .phone {
+      display: none;
+    }
+  }
+  .shot {
+    display: block;
+    transition: transform 0.5s var(--ease);
+  }
+  /* Only a link lifts. */
+  .shot[href]:hover {
+    transform: translateY(-4px);
   }
   .lead {
-    margin: 24px 0 72px;
-    max-width: 38ch;
-    font: 400 clamp(20px, 2.2vw, 26px)/1.35 var(--sans);
-    color: var(--ink-muted);
-    text-wrap: pretty;
-  }
-  .list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
     display: grid;
-    gap: 96px;
+    gap: 28px;
+    margin-top: 56px;
+  }
+  .lead .g-name {
+    margin: 14px 0 14px;
+    font-size: clamp(32px, 3.6vw, 48px);
+    line-height: 1.05;
+  }
+  .lead dl {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 12px 16px;
+    margin: 24px 0 28px;
+    font-size: 15px;
+  }
+  .lead dt {
+    padding-top: 3px;
+  }
+  .lead dd {
+    margin: 0;
+  }
+  .lead p:last-child {
+    margin: 0;
+  }
+  @media (min-width: 1100px) {
+    .lead {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: 48px;
+      align-items: center;
+    }
   }
 </style>
