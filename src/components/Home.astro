@@ -7,8 +7,8 @@ import { SITE } from "../site";
 import { blogIndexUrl, formatDate, getPostsFor, postLocale, postSlug, postUrl } from "../lib/blog";
 import { Image } from "astro:assets";
 import photo from "../assets/romer.png";
-import ProjectRow from "./projects/ProjectRow.astro";
-import { getProjects, projectsIndexUrl } from "../lib/projects";
+import ProjectsSummary from "./projects/ProjectsSummary.astro";
+import { projectsIndexUrl } from "../lib/projects";
 
 interface Props {
   locale: Locale;
@@ -34,8 +34,6 @@ const path: { n: 1 | 2 | 3 | 4; tags: [string, IconName?][] }[] = [
 
 // The latest articles, written in Spanish; a post shows in the page language when it has been translated.
 const posts = (await getPostsFor(locale)).slice(0, 3);
-
-const projects = (await getProjects()).slice(0, 2);
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -94,15 +92,7 @@ const jsonLd = {
       <div class="wrap flowing">
         <h2>{t(locale, "projects.title")}</h2>
         <p class="intro">{t(locale, "projects.text")}</p>
-        <ul class="projects">
-          {
-            projects.map((project) => (
-              <li>
-                <ProjectRow project={project} locale={locale} />
-              </li>
-            ))
-          }
-        </ul>
+        <ProjectsSummary locale={locale} />
         <a class="more" href={projectsIndexUrl(locale)} data-umami-event="all-projects">{t(locale, "projects.all")} →</a>
       </div>
     </section>
@@ -486,13 +476,6 @@ const jsonLd = {
     height: 14px;
   }
 
-  .projects {
-    list-style: none;
-    margin: 0 0 40px;
-    padding: 0;
-    display: grid;
-    gap: 72px;
-  }
   .intro {
     margin: -16px 0 32px;
     color: var(--ink-muted);

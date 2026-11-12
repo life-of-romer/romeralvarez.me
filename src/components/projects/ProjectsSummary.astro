@@ -1,0 +1,174 @@
+---
+import PieceVisual from "./PieceVisual.astro";
+import { t, type Locale } from "../../i18n";
+import { getPieces } from "../../lib/gallery";
+import { projectsIndexUrl } from "../../lib/projects";
+import "./gallery.css";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const pieces = (await getPieces(locale)).slice(0, 4);
+const gallery = projectsIndexUrl(locale);
+---
+
+<!-- The home page's summary of the gallery: every piece on a row, and the one you point at shown beside the list. -->
+<div class="summary" data-summary>
+  <ol class="rows">
+    {
+      pieces.map((piece, i) => (
+        <li data-row={piece.id} class:list={{ on: i === 0 }}>
+          {/* A website opens its own page; a system has none yet, so its row leads to the gallery. */}
+          <a href={piece.href ?? gallery} data-umami-event="project" data-umami-event-slug={piece.id} data-umami-event-place="home">
+            <span class="label year">{piece.year}</span>
+            <span class="main">
+              <span class="g-name">{piece.name}</span>
+              <span class="sub">
+                {piece.org} · {piece.role}
+              </span>
+            </span>
+            <span class="label kind">{t(locale, `gallery.kind.${piece.kind}`)}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+  <div class="pane" aria-hidden="true">
+    {
+      pieces.map((piece, i) => (
+        <div class:list={["view", { on: i === 0 }]} data-view={piece.id}>
+          <PieceVisual piece={piece} sizes="520px" />
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-summary]");
+  if (root) {
+    const rows = [...root.querySelectorAll<HTMLElement>("[data-row]")];
+    const views = [...root.querySelectorAll<HTMLElement>("[data-view]")];
+    const show = (row: HTMLElement) => {
+      rows.forEach((r) => r.classList.toggle("on", r === row));
+      views.forEach((v) => v.classList.toggle("on", v.dataset.view === row.dataset.row));
+    };
+    rows.forEach((row) => {
+      row.addEventListener("pointerenter", () => show(row));
+      row.addEventListener("focusin", () => show(row));
+    });
+  }
+</script>
+
+<style>
+  .summary {
+    margin-bottom: 40px;
+  }
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  .rows li {
+    border-bottom: 1px solid var(--line);
+  }
+  .rows a {
+    position: relative;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 12px;
+    padding: 22px 0;
+    text-decoration: none;
+  }
+  .main {
+    display: grid;
+    gap: 6px;
+  }
+  .g-name {
+    font-size: clamp(22px, 2.1vw, 28px);
+    line-height: 1.12;
+    transition: color 0.2s var(--ease);
+  }
+  .rows a:hover .g-name {
+    color: var(--pipeline-ink);
+  }
+  .sub {
+    color: var(--ink-muted);
+    font-size: 15px;
+  }
+  .kind {
+    padding: 7px 9px;
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--ink);
+  }
+  /* The home column is narrow on phones: the year gives its room to the name. */
+  @media (max-width: 719.98px) {
+    .rows a {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .year {
+      display: none;
+    }
+    .g-name {
+      font-size: 20px;
+    }
+  }
+  /* Phones get the list alone; the visuals live on the gallery page. */
+  .pane {
+    display: none;
+  }
+  @media (min-width: 1100px) {
+    .summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 56px;
+      align-items: center;
+    }
+    .rows li.on .g-name {
+      color: var(--pipeline-ink);
+    }
+    /* The orange node marks the row on show. */
+    .rows li.on a::before {
+      content: "";
+      position: absolute;
+      left: -22px;
+      top: 50%;
+      width: 9px;
+      height: 9px;
+      margin-top: -4.5px;
+      border-radius: 50%;
+      background: var(--pipeline);
+    }
+    .pane {
+      display: grid;
+      align-items: center;
+    }
+    .view {
+      grid-area: 1 / 1;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition:
+        opacity 0.35s var(--ease),
+        transform 0.5s var(--ease),
+        visibility 0s 0.35s;
+    }
+    .view.on {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition-delay: 0s;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .view {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>

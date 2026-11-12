@@ -1,5 +1,6 @@
 ---
 import { locales, localePath, t, type Locale } from "../i18n";
+import { projectsIndexUrl } from "../lib/projects";
 
 interface Props {
   locale: Locale;
@@ -11,7 +12,8 @@ const { locale, alternates } = Astro.props;
 const home = localePath(locale);
 const links = [
   { href: `${home}#services`, label: t(locale, "nav.services") },
-  { href: `${home}#projects`, label: t(locale, "nav.projects") },
+  // Projects opens the gallery itself; the others are sections of the home page.
+  { href: projectsIndexUrl(locale), label: t(locale, "nav.projects") },
   { href: `${home}#path`, label: t(locale, "nav.path") },
   { href: `${home}#writing`, label: t(locale, "nav.writing") },
   { href: `${home}#contact`, label: t(locale, "nav.contact") },
