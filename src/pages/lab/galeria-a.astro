@@ -1,0 +1,135 @@
+---
+// Variant A: one piece large, the rest in a compact grid.
+import Base from "../../layouts/Base.astro";
+import ProjectsEnd from "../../components/projects/ProjectsEnd.astro";
+import Filter from "../../components/lab/Filter.astro";
+import Visual from "../../components/lab/Visual.astro";
+import { getPieces, kinds } from "../../components/lab/pieces";
+import { t } from "../../i18n";
+import "../../components/lab/lab.css";
+
+const locale = "es";
+const [lead, ...rest] = await getPieces();
+---
+
+<Base locale={locale} title="Galería A · Romer Alvarez">
+  <main id="main" class="wrap g-main">
+    <h1>{t(locale, "projects.page.title")}</h1>
+    <p class="g-lead">{t(locale, "projects.page.lead")}</p>
+    <Filter pieces={[lead, ...rest]} />
+
+    <article class="lead" data-kind={lead.kind}>
+      <a class="shot" href={lead.href} tabindex="-1" aria-hidden="true"><Visual piece={lead} /></a>
+      <div class="body">
+        <p class="label g-meta"><span>{kinds[lead.kind]}</span><span>{lead.org}</span><span>{lead.year}</span></p>
+        <h2 class="g-name"><a href={lead.href}>{lead.name}</a></h2>
+        <p class="g-summary">{lead.summary}</p>
+        <dl>
+          <dt class="label">{t(locale, "projects.role")}</dt>
+          <dd>{lead.role}</dd>
+          <dt class="label">Stack</dt>
+          <dd><ul class="g-tags">{lead.stack.map((s) => <li>{s}</li>)}</ul></dd>
+        </dl>
+        <p><a class="pill dark" href={lead.href}>{t(locale, "projects.view")}</a></p>
+      </div>
+    </article>
+
+    <ul class="grid">
+      {
+        rest.map((piece) => (
+          <li data-kind={piece.kind}>
+            <a class="shot" href={piece.href} tabindex="-1" aria-hidden="true">
+              <Visual piece={piece} sizes="(min-width: 1100px) 420px, 100vw" />
+            </a>
+            <p class="label g-meta">
+              <span>{kinds[piece.kind]}</span>
+              <span>{piece.org}</span>
+              <span>{piece.year}</span>
+            </p>
+            <h2 class="g-name">
+              <a href={piece.href}>{piece.name}</a>
+            </h2>
+            <p class="role">{piece.role}</p>
+            <ul class="g-tags">
+              {piece.stack.map((s) => (
+                <li>{s}</li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
+    <ProjectsEnd locale={locale} title={t(locale, "projects.page.endTitle")} text={t(locale, "projects.page.endText")} />
+  </main>
+</Base>
+
+<style>
+  .shot {
+    display: block;
+    transition: transform 0.5s var(--ease);
+  }
+  .shot:hover {
+    transform: translateY(-4px);
+  }
+  .lead {
+    display: grid;
+    gap: 28px;
+    margin-top: 56px;
+  }
+  .lead .g-name {
+    margin: 14px 0 14px;
+    font-size: clamp(32px, 3.6vw, 48px);
+    line-height: 1.05;
+  }
+  .lead dl {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 12px 16px;
+    margin: 24px 0 28px;
+    font-size: 15px;
+  }
+  .lead dt {
+    padding-top: 3px;
+  }
+  .lead dd {
+    margin: 0;
+  }
+  .lead p:last-child {
+    margin: 0;
+  }
+  .grid {
+    list-style: none;
+    margin: 96px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 64px 40px;
+  }
+  .grid .g-meta {
+    margin-top: 24px;
+  }
+  .grid .g-name {
+    margin: 10px 0 6px;
+    font-size: clamp(22px, 2vw, 26px);
+    line-height: 1.15;
+  }
+  .role {
+    margin: 0 0 16px;
+    color: var(--ink-muted);
+    font-size: 15px;
+  }
+  @media (min-width: 720px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .lead {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: 48px;
+      align-items: center;
+    }
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

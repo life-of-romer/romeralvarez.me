@@ -1,0 +1,76 @@
+---
+import type { Piece } from "./pieces";
+
+interface Props {
+  pieces: Piece[];
+}
+
+const { pieces } = Astro.props;
+const count = (kind?: string) => pieces.filter((p) => !kind || p.kind === kind).length;
+const options = [
+  { value: "all", label: "Todo", n: count() },
+  { value: "system", label: "Sistemas", n: count("system") },
+  { value: "web", label: "Webs", n: count("web") },
+];
+---
+
+<!-- Filters every [data-kind] element on the page. -->
+<div class="filter" role="group" aria-label="Filtrar por tipo">
+  {
+    options.map(({ value, label, n }, i) => (
+      <button type="button" data-filter={value} aria-pressed={i === 0 ? "true" : "false"}>
+        {label} <span>{n}</span>
+      </button>
+    ))
+  }
+</div>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
+  buttons.forEach((button) =>
+    button.addEventListener("click", () => {
+      const kind = button.dataset.filter;
+      buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+      document.querySelectorAll<HTMLElement>("[data-kind]").forEach((el) => (el.hidden = kind !== "all" && el.dataset.kind !== kind));
+      document.dispatchEvent(new CustomEvent("gallery:filter"));
+    }),
+  );
+</script>
+
+<style>
+  .filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  button {
+    padding: 11px 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink);
+    font: 500 12px/1 var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background 0.2s var(--ease),
+      border-color 0.2s var(--ease);
+  }
+  button:hover {
+    border-color: var(--line-strong);
+  }
+  button span {
+    margin-left: 4px;
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  button[aria-pressed="true"] {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
+  button[aria-pressed="true"] span {
+    color: #b6bac2;
+  }
+</style>

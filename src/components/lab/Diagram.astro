@@ -1,0 +1,155 @@
+---
+interface Props {
+  title: string;
+  chain: string[];
+  base?: string;
+}
+
+const { title, chain, base } = Astro.props;
+---
+
+<!-- A system drawn on the same dark frame as the browser window: the pieces in order, joined by the pipeline line. -->
+<div class="plan">
+  <div class="bar" aria-hidden="true"><i></i><span>{title}</span></div>
+  <div class="board">
+    <div class="inner">
+      <ol class="chain">{chain.map((node) => <li>{node}</li>)}</ol>
+      {base && <p class="base">{base}</p>}
+    </div>
+  </div>
+</div>
+
+<style>
+  .plan {
+    padding: 10px;
+    border-radius: 14px;
+    background: var(--ink);
+    box-shadow: 0 30px 60px -28px rgb(17 19 24 / 0.45);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 6px 10px;
+    font: 500 11px/1 var(--mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #b6bac2;
+  }
+  .bar i {
+    width: 9px;
+    height: 9px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--pipeline);
+  }
+  .bar span {
+    min-width: 0;
+    overflow: hidden;
+    padding: 6px 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .board {
+    container-type: inline-size;
+    border-radius: 6px;
+    background:
+      radial-gradient(circle, #2a2e35 1px, transparent 1.5px) 0 0 / 22px 22px,
+      #14161a;
+  }
+  .inner {
+    display: grid;
+    align-content: center;
+    gap: 22px;
+    aspect-ratio: 16 / 10;
+    padding: 24px;
+  }
+  .chain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.2em;
+    font-size: clamp(12px, 2cqw, 15px);
+  }
+  .chain li {
+    position: relative;
+    padding: 0.85em 0.9em;
+    border: 1px solid #3a3e46;
+    border-radius: 8px;
+    background: #1c1f24;
+    color: #eceef1;
+    font: 500 1em/1 var(--mono);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  /* The pipeline between two pieces, ending in its node. */
+  .chain li + li::before {
+    content: "";
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    width: 2.2em;
+    height: 2px;
+    margin-top: -1px;
+    background: var(--pipeline);
+  }
+  .chain li + li::after {
+    content: "";
+    position: absolute;
+    left: -4px;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    margin-top: -3.5px;
+    border-radius: 50%;
+    background: var(--pipeline);
+  }
+  .base {
+    justify-self: center;
+    width: min(100%, 520px);
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px dashed #4a4f58;
+    border-radius: 8px;
+    color: #b6bac2;
+    font: 500 11px/1 var(--mono);
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  /* Narrow frames stack the system top to bottom. */
+  @container (max-width: 560px) {
+    .inner {
+      aspect-ratio: auto;
+      padding: 20px 18px;
+      gap: 14px;
+    }
+    .chain {
+      flex-direction: column;
+      gap: 14px;
+      font-size: 12px;
+    }
+    .chain li {
+      min-width: 150px;
+      padding: 9px 12px;
+      text-align: center;
+    }
+    .chain li + li::before {
+      right: auto;
+      left: 50%;
+      top: auto;
+      bottom: 100%;
+      width: 2px;
+      height: 14px;
+      margin: 0 0 0 -1px;
+    }
+    .chain li + li::after {
+      left: 50%;
+      top: -4px;
+      margin: 0 0 0 -3.5px;
+    }
+  }
+</style>
