@@ -1,0 +1,23 @@
+---
+import { Image } from "astro:assets";
+import Browser from "./Browser.astro";
+import SystemDiagram from "./SystemDiagram.astro";
+import type { Piece } from "../../lib/gallery";
+
+interface Props {
+  piece: Piece;
+  sizes?: string;
+}
+
+const { piece, sizes = "(min-width: 1100px) 680px, 100vw" } = Astro.props;
+---
+
+{
+  piece.project ? (
+    <Browser url={piece.project.data.url}>
+      <Image src={piece.project.data.poster} alt="" widths={[480, 800, 1280]} sizes={sizes} style="display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover" />
+    </Browser>
+  ) : (
+    <SystemDiagram title={piece.org} chain={piece.chain ?? []} base={piece.base} />
+  )
+}

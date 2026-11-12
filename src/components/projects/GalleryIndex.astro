@@ -1,0 +1,81 @@
+---
+import PieceVisual from "./PieceVisual.astro";
+import { t, type Locale } from "../../i18n";
+import type { Piece } from "../../lib/gallery";
+
+interface Props {
+  pieces: Piece[];
+  locale: Locale;
+}
+
+const { pieces, locale } = Astro.props;
+---
+
+<!-- Every piece as a row with its window or diagram under it. The phone view of the gallery. -->
+<ol class="rows">
+  {
+    pieces.map((piece) => {
+      // A system has no page to open yet, so its row and visual are plain elements.
+      const Tag = piece.href ? "a" : "div";
+      return (
+      <li data-kind={piece.kind}>
+        <Tag class="row" href={piece.href}>
+          <span class="label year">{piece.year}</span>
+          <span class="main">
+            <span class="g-name">{piece.name}</span>
+            <span class="sub">
+              {piece.org} · {piece.role}
+            </span>
+          </span>
+          <span class="label kind">{t(locale, `gallery.kind.${piece.kind}`)}</span>
+        </Tag>
+        <Tag class="shot" href={piece.href} tabindex={piece.href ? "-1" : undefined} aria-hidden="true">
+          <PieceVisual piece={piece} sizes="100vw" />
+        </Tag>
+      </li>
+      );
+    })
+  }
+</ol>
+
+<style>
+  .rows {
+    list-style: none;
+    margin: 40px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  .rows li {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 32px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 12px;
+    padding: 26px 0;
+    text-decoration: none;
+  }
+  .main {
+    display: grid;
+    gap: 8px;
+  }
+  .g-name {
+    font-size: 24px;
+    line-height: 1.1;
+  }
+  .sub {
+    color: var(--ink-muted);
+    font-size: 15px;
+  }
+  .kind {
+    padding: 7px 9px;
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .shot {
+    display: block;
+  }
+</style>

@@ -1,0 +1,55 @@
+/* Shared by the gallery components and the projects page. */
+.g-main {
+  padding-block: 72px 0;
+}
+.g-lead {
+  margin: 24px 0 40px;
+  max-width: 38ch;
+  font: 400 clamp(20px, 2.2vw, 26px)/1.35 var(--sans);
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+.g-tags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.g-tags li {
+  font: 500 11px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+.g-name {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.g-name a {
+  text-decoration: none;
+}
+.g-name a:hover {
+  color: var(--pipeline-ink);
+}
+.g-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 0;
+}
+.g-summary {
+  margin: 0;
+  max-width: 46ch;
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+[hidden] {
+  display: none !important;
+}

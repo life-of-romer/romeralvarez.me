@@ -1,0 +1,18 @@
+order: 3
+year: 2023
+org: PwC
+name:
+  es: Backends para clientes públicos y privados
+  en: Backends for public and private clients
+  it: Backend per clienti pubblici e privati
+role:
+  es: Desarrollo backend
+  en: Backend development
+  it: Sviluppo backend
+summary:
+  es: Servicios en Java y Spring Boot para clientes públicos y privados, en equipos ágiles.
+  en: Java and Spring Boot services for public and private clients, in agile teams.
+  it: Servizi in Java e Spring Boot per clienti pubblici e privati, in team agili.
+stack: [Java, Spring Boot, Kafka, PostgreSQL]
+chain: [API, Spring Boot, Kafka, PostgreSQL]
+base: Java

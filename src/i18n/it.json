@@ -79,5 +79,17 @@
   "blog.back": "← Tutti gli articoli",
   "notFound.title": "Pagina non trovata",
   "notFound.text": "Questa pagina non esiste o è stata spostata.",
-  "notFound.home": "Torna alla home"
+  "notFound.home": "Torna alla home",
+  "gallery.filter.label": "Filtra per tipo",
+  "gallery.filter.all": "Tutto",
+  "gallery.filter.system": "Sistemi",
+  "gallery.filter.web": "Siti",
+  "gallery.kind.system": "Sistema",
+  "gallery.kind.web": "Sito",
+  "gallery.more": "Altri lavori.",
+  "gallery.carousel": "carosello",
+  "gallery.prev": "Progetto precedente",
+  "gallery.next": "Progetto successivo",
+  "gallery.pause": "Metti in pausa il carosello",
+  "gallery.play": "Avvia il carosello"
 }

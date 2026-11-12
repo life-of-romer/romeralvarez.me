@@ -1,0 +1,22 @@
+order: 2
+year: 2024
+org: RatedPower · Enverus
+name:
+  es: Agentes de IA en producción
+  en: AI agents in production
+  it: Agenti IA in produzione
+role:
+  es: Construcción y mantenimiento
+  en: Build and maintenance
+  it: Costruzione e manutenzione
+summary:
+  es: Agentes de IA que trabajan en producción dentro de los productos de energía, sobre Bedrock.
+  en: AI agents working in production inside the energy products, on Bedrock.
+  it: Agenti IA che lavorano in produzione dentro i prodotti per l'energia, su Bedrock.
+stack: [Bedrock, AWS]
+chain:
+  - { es: Petición, en: Request, it: Richiesta }
+  - { es: Agente, en: Agent, it: Agente }
+  - Bedrock
+  - { es: Respuesta, en: Response, it: Risposta }
+base: AWS

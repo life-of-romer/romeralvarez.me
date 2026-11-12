@@ -1,0 +1,18 @@
+order: 0
+year: 2024
+org: RatedPower · Enverus
+name:
+  es: La plataforma de Power Analyst
+  en: The Power Analyst platform
+  it: La piattaforma di Power Analyst
+role:
+  es: Construcción y mantenimiento
+  en: Build and maintenance
+  it: Costruzione e manutenzione
+summary:
+  es: "El cloud donde funcionan Power Analyst y otros productos de energía: Kubernetes en AWS, definido en Terraform y con observabilidad."
+  en: "The cloud where Power Analyst and other energy products run: Kubernetes on AWS, defined in Terraform, with observability."
+  it: "Il cloud dove girano Power Analyst e altri prodotti per l'energia: Kubernetes su AWS, definito in Terraform e con osservabilità."
+stack: [AWS, Kubernetes, Terraform, ArgoCD, GitHub Actions, Grafana]
+chain: [Commit, GitHub Actions, ArgoCD, Kubernetes, Grafana]
+base: Terraform · AWS

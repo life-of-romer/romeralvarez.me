@@ -10,6 +10,7 @@ src/
   components/          Home, Header, Footer, Icon
   layouts/             Base (head, SEO, header, footer) and Post
   content/blog/<lang>/ blog posts in Markdown, one folder per language
+  content/systems/     one YAML per system (company work shown with a diagram)
   i18n/                interface strings, one JSON per language with the same keys
   scripts/             the pipeline line and the 3D scenes (three.js, loaded on demand)
   styles/global.css    design tokens and base styles

@@ -1,0 +1,308 @@
+---
+import PieceVisual from "./PieceVisual.astro";
+import { t, type Locale } from "../../i18n";
+import type { Piece } from "../../lib/gallery";
+
+interface Props {
+  pieces: Piece[];
+  title: string;
+  locale: Locale;
+}
+
+const { pieces, title, locale } = Astro.props;
+const two = (n: number) => String(n).padStart(2, "0");
+---
+
+<!-- The rest of the work on one line: the piece in the middle faces you, its neighbours lean away. Scrolls natively (wheel, swipe, keys). -->
+<section class="more" aria-roledescription={t(locale, "gallery.carousel")} aria-labelledby="more-title" data-carousel>
+  <div class="wrap head">
+    <h2 id="more-title">{title}</h2>
+    <div class="ctl">
+      <p class="label count" aria-live="off"><b data-now>01</b> / <span data-total>{two(pieces.length)}</span></p>
+      <button type="button" data-prev aria-label={t(locale, "gallery.prev")}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"></path></svg>
+      </button>
+      <button type="button" data-next aria-label={t(locale, "gallery.next")}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"></path></svg>
+      </button>
+      <button type="button" class="toggle" data-toggle aria-label={t(locale, "gallery.pause")} data-pause={t(locale, "gallery.pause")} data-play={t(locale, "gallery.play")}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-pause" d="M8 6v12M16 6v12"></path><path class="i-play" d="M9 6l9 6-9 6z"></path></svg>
+      </button>
+    </div>
+  </div>
+  <ul class="track" tabindex="0" aria-label={title}>
+    {
+      pieces.map((piece) => {
+        // A system has no page yet: plain elements, but a leaning slide still comes to the middle on click.
+        const Shot = piece.href ? "a" : "div";
+        const Name = piece.href ? "a" : "span";
+        return (
+        <li class="slide" data-kind={piece.kind}>
+          <Shot class="shot" href={piece.href} tabindex={piece.href ? "-1" : undefined} aria-hidden="true">
+            <PieceVisual piece={piece} sizes="(min-width: 900px) 760px, 84vw" />
+          </Shot>
+          <div class="cap">
+            <p class="label g-meta">
+              <span>{t(locale, `gallery.kind.${piece.kind}`)}</span>
+              <span>{piece.org}</span>
+              <span>{piece.year}</span>
+            </p>
+            <h3 class="g-name">
+              <Name href={piece.href}>{piece.name}</Name>
+            </h3>
+            <p class="role">{piece.role}</p>
+            <ul class="g-tags">
+              {piece.stack.map((s) => (
+                <li>{s}</li>
+              ))}
+            </ul>
+          </div>
+        </li>
+        );
+      })
+    }
+  </ul>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-carousel]");
+  if (root) {
+    const track = root.querySelector<HTMLElement>(".track")!;
+    const all = [...root.querySelectorAll<HTMLElement>(".slide")];
+    const now = root.querySelector<HTMLElement>("[data-now]")!;
+    const total = root.querySelector<HTMLElement>("[data-total]")!;
+    const toggle = root.querySelector<HTMLButtonElement>("[data-toggle]")!;
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const two = (n: number) => String(n).padStart(2, "0");
+    const slides = () => all.filter((s) => !s.hidden);
+    let active = 0;
+    let playing = !still;
+    let hold = false;
+    let seen = false;
+
+    // Each slide knows how far it is from the middle (--d, in slide widths), and CSS leans it accordingly.
+    const measure = () => {
+      const list = slides();
+      const middle = track.scrollLeft + track.clientWidth / 2;
+      let best = Infinity;
+      list.forEach((slide, i) => {
+        const d = (slide.offsetLeft + slide.offsetWidth / 2 - middle) / slide.offsetWidth;
+        const c = Math.max(-1.5, Math.min(1.5, d));
+        slide.style.setProperty("--d", c.toFixed(3));
+        slide.style.setProperty("--a", Math.abs(c).toFixed(3));
+        if (Math.abs(d) < best) {
+          best = Math.abs(d);
+          active = i;
+        }
+      });
+      list.forEach((slide, i) => slide.classList.toggle("on", i === active));
+      now.textContent = two(active + 1);
+      total.textContent = two(list.length);
+      root.classList.toggle("single", list.length < 2);
+    };
+
+    const go = (i: number, smooth = true) => {
+      const list = slides();
+      const slide = list[(i + list.length) % list.length];
+      if (!slide) return;
+      track.scrollTo({ left: slide.offsetLeft - (track.clientWidth - slide.offsetWidth) / 2, behavior: smooth && !still ? "smooth" : "auto" });
+    };
+
+    let frame = 0;
+    track.addEventListener("scroll", () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(measure);
+    });
+    addEventListener("resize", measure);
+    root.querySelector("[data-prev]")!.addEventListener("click", () => go(active - 1));
+    root.querySelector("[data-next]")!.addEventListener("click", () => go(active + 1));
+    all.forEach((slide) =>
+      slide.querySelector(".shot")!.addEventListener("click", (event) => {
+        // A leaning neighbour comes to the middle first; only the piece facing you opens.
+        const i = slides().indexOf(slide);
+        if (i !== active) {
+          event.preventDefault();
+          go(i);
+        }
+      }),
+    );
+
+    const paint = () => {
+      root.classList.toggle("paused", !playing);
+      toggle.setAttribute("aria-label", (playing ? toggle.dataset.pause : toggle.dataset.play)!);
+    };
+    toggle.addEventListener("click", () => {
+      playing = !playing;
+      paint();
+    });
+    // It only moves by itself while you watch it and leave it alone; touching it stops it for good.
+    const stop = () => {
+      playing = false;
+      paint();
+    };
+    ["pointerdown", "wheel", "keydown"].forEach((type) => track.addEventListener(type, stop, { passive: true }));
+    root.addEventListener("pointerenter", () => (hold = true));
+    root.addEventListener("pointerleave", () => (hold = false));
+    root.addEventListener("focusin", () => (hold = true));
+    root.addEventListener("focusout", () => (hold = false));
+    new IntersectionObserver(([entry]) => (seen = entry.isIntersecting), { threshold: 0.6 }).observe(track);
+    setInterval(() => {
+      if (playing && seen && !hold && !document.hidden && slides().length > 1) go(active + 1);
+    }, 6000);
+
+    document.addEventListener("gallery:filter", () => {
+      go(0, false);
+      measure();
+    });
+    paint();
+    // With three or more, open on the second so a neighbour shows on each side.
+    go(slides().length > 2 ? 1 : 0, false);
+    measure();
+  }
+</script>
+
+<style>
+  .more {
+    margin-top: 112px;
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px 32px;
+  }
+  h2 {
+    margin: 0;
+    font: 500 clamp(32px, 3.6vw, 48px)/1.05 var(--display);
+    letter-spacing: -0.03em;
+  }
+  .ctl {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .count {
+    margin: 0 12px 0 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .count b {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition:
+      background 0.2s var(--ease),
+      color 0.2s var(--ease),
+      border-color 0.2s var(--ease);
+  }
+  button:hover {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .toggle {
+    margin-left: 8px;
+  }
+  .i-play,
+  .paused .i-pause {
+    display: none;
+  }
+  .paused .i-play {
+    display: inline;
+    fill: currentColor;
+    stroke: none;
+  }
+  .single .ctl {
+    display: none;
+  }
+
+  .track {
+    --w: min(760px, 84vw);
+    list-style: none;
+    margin: 0;
+    padding: 48px calc(50% - var(--w) / 2) 24px;
+    display: flex;
+    gap: clamp(20px, 3vw, 48px);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .track::-webkit-scrollbar {
+    display: none;
+  }
+  .slide {
+    --d: 0;
+    --a: 0;
+    flex: none;
+    width: var(--w);
+    scroll-snap-align: center;
+  }
+  /* Neighbours lean away from the middle and step back. */
+  .shot {
+    display: block;
+    transform: perspective(1600px) rotateY(calc(var(--d) * -16deg)) scale(calc(1 - var(--a) * 0.1));
+    transform-origin: calc(50% - var(--d) * 50%) 50%;
+    opacity: calc(1 - var(--a) * 0.3);
+    will-change: transform;
+  }
+  .slide:not(.on) .shot {
+    cursor: pointer;
+  }
+  .cap {
+    max-width: 560px;
+    margin: 32px auto 0;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 0.4s var(--ease),
+      transform 0.6s var(--ease);
+  }
+  .slide.on .cap {
+    opacity: 1;
+    transform: none;
+  }
+  .cap .g-meta,
+  .cap .g-tags {
+    justify-content: center;
+  }
+  .cap .g-name {
+    margin: 12px 0 6px;
+    font-size: clamp(24px, 2.4vw, 32px);
+    line-height: 1.12;
+  }
+  .role {
+    margin: 0 0 18px;
+    color: var(--ink-muted);
+    font-size: 15px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .shot {
+      transform: none;
+    }
+    .cap {
+      transition: none;
+    }
+  }
+</style>
