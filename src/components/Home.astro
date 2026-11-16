@@ -25,11 +25,13 @@ const services: { icon: IconName; model: number; n: 1 | 2 | 3 }[] = [
 ];
 
 // The path so far, oldest first. Each stop is a node on the line.
-const path: { n: 1 | 2 | 3 | 4; tags: [string, IconName?][] }[] = [
-  { n: 1, tags: [["Linux"], ["Azure"], ["Docker", "docker"]] },
-  { n: 2, tags: [["Java"], ["Spring Boot"], ["Kafka"], ["PostgreSQL"]] },
+// A technology shows its own logo as a 3D piece (public/models/tech, named like its icon); the flat icon is
+// the fallback. The last stop lists the languages I speak, which are words and not tools.
+const path: { n: 1 | 2 | 3 | 4; tags: [string, IconName?][]; spoken?: boolean }[] = [
+  { n: 1, tags: [["Linux", "linux"], ["Azure", "azure"], ["Docker", "docker"]] },
+  { n: 2, tags: [["Java", "java"], ["Spring Boot", "spring"], ["Kafka", "kafka"], ["PostgreSQL", "postgresql"]] },
   { n: 3, tags: [["AWS", "aws"], ["Kubernetes", "kubernetes"], ["Terraform", "terraform"], ["Grafana", "grafana"], ["Bedrock"]] },
-  { n: 4, tags: [["English"], ["Italiano"], ["Español"]] },
+  { n: 4, tags: [["English"], ["Italiano"], ["Español"]], spoken: true },
 ];
 
 // The latest articles, written in Spanish; a post shows in the page language when it has been translated.
@@ -108,16 +110,21 @@ const jsonLd = {
         </div>
         <ol class="stops">
           {
-            path.map(({ n, tags }) => (
+            path.map(({ n, tags, spoken }) => (
               <li class="stop" data-node="18">
                 <span class="when">{t(locale, `path.${n}.when`)}</span>
                 <div>
                   <h3>{t(locale, `path.${n}.title`)}</h3>
                   <p>{t(locale, `path.${n}.text`)}</p>
-                  <ul class="tags">
+                  <ul class:list={["tags", { spoken }]}>
                     {tags.map(([name, icon]) => (
                       <li>
-                        {icon && <Icon name={icon} />}
+                        {icon && (
+                          <span class="piece" data-model={`tech/${icon}`} data-still>
+                            <Icon name={icon} />
+                          </span>
+                        )}
+                        {!icon && !spoken && <span class="piece none" aria-hidden="true">+</span>}
                         {name}
                       </li>
                     ))}
@@ -191,7 +198,9 @@ const jsonLd = {
   // The hero is in view from the start, so its scene waits for the page to finish loading first.
   const afterLoad = (run: () => void) => (document.readyState === "complete" ? run() : addEventListener("load", run, { once: true }));
   afterLoad(() => lazy("#stage", () => Promise.all([import("../scripts/hero"), import("../scripts/rider")])));
+  // "What I do" and "About me" share the piece renderer; whichever comes into view first loads it.
   lazy("#services", () => import("../scripts/tokens"));
+  lazy("#path", () => import("../scripts/tokens"));
   lazy("#path", () => import("../scripts/path"));
 
   // Copy the email for people whose browser has no mail app behind mailto.
@@ -458,22 +467,62 @@ const jsonLd = {
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px 24px;
   }
   .tags li {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    font: 500 11px/1 var(--mono);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    background: var(--surface);
-    border-radius: 6px;
-    padding: 8px 10px;
+    gap: 10px;
+    font: 500 17px/1 var(--sans);
+    letter-spacing: -0.01em;
   }
-  .tags :global(svg.ico) {
-    width: 14px;
-    height: 14px;
+  /* The logo of each technology, drawn in 3D by tokens.ts; the flat icon shows until it loads. */
+  .piece {
+    width: 52px;
+    height: 52px;
+    flex: none;
+    display: grid;
+    place-items: center;
+  }
+  .piece :global(svg.ico) {
+    width: 22px;
+    height: 22px;
+  }
+  .piece :global(canvas) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .piece.none {
+    width: 24px;
+    color: var(--pipeline-ink);
+    font: 400 18px/1 var(--mono);
+  }
+  /* Languages read as a sentence, not as tools. */
+  .tags.spoken {
+    gap: 0 6px;
+    color: var(--ink-muted);
+  }
+  .tags.spoken li {
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+  .tags.spoken li:not(:last-child)::after {
+    content: "·";
+    margin-left: -4px;
+    color: var(--line-strong);
+  }
+  @media (max-width: 719.98px) {
+    .tags {
+      gap: 2px 18px;
+    }
+    .tags li {
+      font-size: 16px;
+    }
+    .piece {
+      width: 44px;
+      height: 44px;
+    }
   }
 
   .intro {

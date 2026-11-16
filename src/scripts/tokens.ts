@@ -1,5 +1,5 @@
 // "What I do": each service gets one of the toy pieces from the hero. It pops in when it comes into view
-// and then sways slowly on its own. One WebGL renderer draws every piece and copies it into that piece's
+// and then sways slowly on its own. "About me" uses the same renderer for the technology logos, which stand still. One WebGL renderer draws every piece and copies it into that piece's
 // own 2D canvas, so the page keeps a single GPU context for all of them.
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
@@ -17,7 +17,7 @@ try {
 
 if (renderer) start(renderer);
 
-type Token = { el: HTMLElement; ctx: CanvasRenderingContext2D; piece: THREE.Group; n: number; visible: boolean; shown: number };
+type Token = { el: HTMLElement; ctx: CanvasRenderingContext2D; piece: THREE.Group; n: number; visible: boolean; shown: number; still: boolean };
 
 function start(renderer: THREE.WebGLRenderer) {
   const dpr = Math.min(devicePixelRatio || 1, 2);
@@ -44,23 +44,26 @@ function start(renderer: THREE.WebGLRenderer) {
     wake();
   });
 
-  document.querySelectorAll<HTMLElement>(".glyph[data-model]").forEach((el, n) => {
+  document.querySelectorAll<HTMLElement>("[data-model]").forEach((el, n) => {
     const canvas = document.createElement("canvas");
     canvas.setAttribute("aria-hidden", "true");
     const ctx = canvas.getContext("2d")!;
     const piece = new THREE.Group();
     piece.visible = false;
     scene.add(piece);
-    const tk: Token = { el, ctx, piece, n, visible: false, shown: reduce ? 1 : 0 };
+    // A badge-sized piece ([data-still]) faces front and fills its frame; the big ones sway.
+    const still = "still" in el.dataset;
+    const tk: Token = { el, ctx, piece, n, visible: false, shown: reduce ? 1 : 0, still };
 
     loader.load(`/models/${el.dataset.model}.glb`, (gltf) => {
       const m = gltf.scene;
       const box = new THREE.Box3().setFromObject(m);
       const s = box.getSize(new THREE.Vector3());
       const c = box.getCenter(new THREE.Vector3());
-      const k = 1.45 / Math.max(s.x, s.y, s.z);
+      const k = (still ? 2 : 1.45) / Math.max(s.x, s.y, s.z);
       m.scale.setScalar(k);
-      m.position.set(-c.x * k, -box.min.y * k, -c.z * k);
+      // Still pieces are centred on the point the camera looks at instead of standing on the floor.
+      m.position.set(-c.x * k, still ? 0.6 - c.y * k : -box.min.y * k, -c.z * k);
       piece.add(m);
       el.replaceChildren(canvas);
       el.classList.add("token");
@@ -94,15 +97,18 @@ function start(renderer: THREE.WebGLRenderer) {
       // A soft overshoot as the piece arrives, then a slow sway and float.
       const pop = tk.shown < 0.999 ? 1 + Math.sin(tk.shown * Math.PI) * 0.12 : 1;
       tk.piece.scale.setScalar(tk.shown * pop);
-      tk.piece.rotation.y = -0.5 + (reduce ? 0 : Math.sin(t * 0.6) * 0.35) + (1 - tk.shown) * -1.2;
-      tk.piece.position.y = reduce ? 0 : Math.sin(t * 1.1) * 0.04;
+      const calm = reduce || tk.still;
+      // Still pieces face the camera squarely, tipped up by the camera's own elevation.
+      tk.piece.rotation.x = tk.still ? 0.16 : 0;
+      tk.piece.rotation.y = tk.still ? 0 : -0.5 + (calm ? 0 : Math.sin(t * 0.6) * 0.35) + (1 - tk.shown) * -1.2;
+      tk.piece.position.y = calm ? 0 : Math.sin(t * 1.1) * 0.04;
       for (const other of tokens) other.piece.visible = other === tk;
       renderer.render(scene, camera);
       tk.ctx.clearRect(0, 0, size, size);
       tk.ctx.drawImage(renderer.domElement, 0, 0);
     }
-    // With reduced motion the pieces stand still, so one frame each is enough.
-    if (reduce && live.every((t) => t.shown > 0.999)) {
+    // Pieces that stand still need no more frames once they have arrived.
+    if (live.every((t) => (reduce || t.still) && t.shown > 0.999)) {
       running = false;
       return;
     }

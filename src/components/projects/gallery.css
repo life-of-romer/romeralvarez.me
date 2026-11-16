@@ -44,6 +44,29 @@
   gap: 4px 14px;
   margin: 0;
 }
+/* The kind of a piece: its glyph in the pipeline's ink, then the word. No box, so it never reads as a stack tag. */
+.g-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.g-kind svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  fill: none;
+  stroke: var(--pipeline-ink);
+  stroke-width: 1.4;
+}
+.g-kind svg circle {
+  fill: var(--paper);
+}
+.g-kind svg .dot {
+  fill: var(--pipeline-ink);
+  stroke: none;
+}
 .g-summary {
   margin: 0;
   max-width: 46ch;

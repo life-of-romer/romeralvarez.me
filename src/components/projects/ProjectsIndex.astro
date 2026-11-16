@@ -4,6 +4,7 @@ import GalleryFilter from "./GalleryFilter.astro";
 import GalleryIndex from "./GalleryIndex.astro";
 import GalleryCarousel from "./GalleryCarousel.astro";
 import PieceVisual from "./PieceVisual.astro";
+import Kind from "./Kind.astro";
 import ProjectsEnd from "./ProjectsEnd.astro";
 import { locales, t, type Locale } from "../../i18n";
 import { projectsIndexUrl } from "../../lib/projects";
@@ -33,7 +34,7 @@ const alternates = Object.fromEntries(locales.map((l) => [l, projectsIndexUrl(l)
       <article class="lead wide" data-kind={lead.kind}>
         <Shot class="shot" href={lead.href} tabindex={lead.href ? "-1" : undefined} aria-hidden="true"><PieceVisual piece={lead} /></Shot>
         <div class="body">
-          <p class="label g-meta"><span>{t(locale, `gallery.kind.${lead.kind}`)}</span><span>{lead.org}</span><span>{lead.year}</span></p>
+          <p class="label g-meta"><Kind kind={lead.kind} locale={locale} /><span>{lead.org}</span><span>{lead.year}</span></p>
           <h2 class="g-name"><Name href={lead.href}>{lead.name}</Name></h2>
           <p class="g-summary">{lead.summary}</p>
           <dl>
