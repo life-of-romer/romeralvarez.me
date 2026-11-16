@@ -1,0 +1,13 @@
+{
+ "azure": "0669BC,0078D4,35C1F1",
+ "docker": "2496ED,FFFFFF",
+ "java": "5382A1,F8981D",
+ "kafka": "231F20",
+ "postgresql": "336791,FFFFFF,111111",
+ "aws": "232F3E,FF9900",
+ "terraform": "7B42BC",
+ "grafana": "F46800,F99B1C,FCD116",
+ "linux": "1A1A1A,FFFFFF,F5B800",
+ "spring": "6DB33F,FFFFFF",
+ "kubernetes": "326CE5,FFFFFF"
+}

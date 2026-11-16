@@ -1,5 +1,6 @@
 ---
 import PieceVisual from "./PieceVisual.astro";
+import Kind from "./Kind.astro";
 import { t, type Locale } from "../../i18n";
 import type { Piece } from "../../lib/gallery";
 
@@ -43,7 +44,7 @@ const two = (n: number) => String(n).padStart(2, "0");
           </Shot>
           <div class="cap">
             <p class="label g-meta">
-              <span>{t(locale, `gallery.kind.${piece.kind}`)}</span>
+              <Kind kind={piece.kind} locale={locale} />
               <span>{piece.org}</span>
               <span>{piece.year}</span>
             </p>

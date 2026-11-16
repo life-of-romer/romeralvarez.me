@@ -1,0 +1,33 @@
+---
+import { t, type Locale } from "../../i18n";
+import "./gallery.css";
+
+interface Props {
+  kind: "web" | "system";
+  locale: Locale;
+}
+
+const { kind, locale } = Astro.props;
+---
+
+<!-- What kind of piece this is: a glyph of its shape (a browser window, or nodes joined by lines) and the word. -->
+<span class="label g-kind">
+  {
+    kind === "web" ? (
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <rect x="1.5" y="2.5" width="13" height="11" rx="2" />
+        <path d="M1.5 6h13" />
+        <circle class="dot" cx="4" cy="4.25" r=".6" />
+        <circle class="dot" cx="6" cy="4.25" r=".6" />
+      </svg>
+    ) : (
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M5 8l6-4M5 8l6 4" />
+        <circle cx="3" cy="8" r="2" />
+        <circle cx="13" cy="3.5" r="2" />
+        <circle cx="13" cy="12.5" r="2" />
+      </svg>
+    )
+  }
+  {t(locale, `gallery.kind.${kind}`)}
+</span>

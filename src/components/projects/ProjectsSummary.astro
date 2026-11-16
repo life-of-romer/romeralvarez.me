@@ -1,6 +1,7 @@
 ---
 import PieceVisual from "./PieceVisual.astro";
-import { t, type Locale } from "../../i18n";
+import Kind from "./Kind.astro";
+import type { Locale } from "../../i18n";
 import { getPieces } from "../../lib/gallery";
 import { projectsIndexUrl } from "../../lib/projects";
 import "./gallery.css";
@@ -29,7 +30,7 @@ const gallery = projectsIndexUrl(locale);
                 {piece.org} · {piece.role}
               </span>
             </span>
-            <span class="label kind">{t(locale, `gallery.kind.${piece.kind}`)}</span>
+            <Kind kind={piece.kind} locale={locale} />
           </a>
         </li>
       ))
@@ -99,12 +100,6 @@ const gallery = projectsIndexUrl(locale);
   .sub {
     color: var(--ink-muted);
     font-size: 15px;
-  }
-  .kind {
-    padding: 7px 9px;
-    border-radius: 6px;
-    background: var(--surface);
-    color: var(--ink);
   }
   /* The home column is narrow on phones: the year gives its room to the name. */
   @media (max-width: 719.98px) {
